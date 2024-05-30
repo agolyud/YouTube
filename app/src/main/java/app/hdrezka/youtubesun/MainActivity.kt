@@ -42,6 +42,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     YouTubeSunTheme {
-        Greeting("1.0")
+        Greeting("1.0" )
     }
 }
