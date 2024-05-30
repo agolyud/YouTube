@@ -12,6 +12,7 @@ dagger = "2.48"
 daggerAndroidProcessor = "2.48"
 daggerAndroidSupport = "2.48"
 daggerCompiler = "2.48"
+runtimeLivedata = "1.6.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,7 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "daggerAndroidProcessor" }
 dagger-android-support = { module = "com.google.dagger:dagger-android-support", version.ref = "daggerAndroidSupport" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 
 [plugins]
