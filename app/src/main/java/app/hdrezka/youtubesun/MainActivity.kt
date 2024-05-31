@@ -17,11 +17,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val viewModel = MainViewModel()
+        viewModel.setAppVersion(packageManager.getPackageInfo(packageName, 0).versionName)
+
         setContent {
             YouTubeSunTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = viewModel.appVersion.value!!,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -33,7 +37,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "YouTube version, $name",
         modifier = modifier
     )
 }
@@ -42,6 +46,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     YouTubeSunTheme {
-        Greeting("1.0" )
+        Greeting("1.0")
     }
 }
