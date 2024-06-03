@@ -1,13 +1,25 @@
 package app.hdrezka.youtubesun
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MainViewModel : ViewModel() {
-    private val _appVersion = MutableLiveData<String>()
-    val appVersion: LiveData<String> get() = _appVersion
-    fun setAppVersion(version: String) {
-        _appVersion.value = version
+    private val _movieList = MutableStateFlow<List<String>>(emptyList())
+    val movieList: StateFlow<List<String>> get() = _movieList
+
+    init {
+        _movieList.value = listOf(
+            "The Shawshank Redemption",
+            "The Godfather",
+            "The Dark Knight",
+            "Pulp Fiction",
+            "The Lord of the Rings: The Return of the King",
+            "Forrest Gump",
+            "Inception",
+            "Fight Club",
+            "The Matrix",
+            "Goodfellas"
+        )
     }
 }

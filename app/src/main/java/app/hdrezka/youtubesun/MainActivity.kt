@@ -4,28 +4,32 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import app.hdrezka.youtubesun.ui.theme.YouTubeSunTheme
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val viewModel = MainViewModel()
-        viewModel.setAppVersion(packageManager.getPackageInfo(packageName, 0).versionName)
-
         setContent {
             YouTubeSunTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = viewModel.appVersion.value!!,
+                    MovieList(
+                        movies = viewModel.movieList.collectAsState(initial = emptyList()).value,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -35,17 +39,23 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "YouTube version, $name",
-        modifier = modifier
-    )
+fun MovieList(movies: List<String>, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(movies) { movie ->
+            Text(
+                text = movie,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MovieListPreview() {
     YouTubeSunTheme {
-        Greeting("1.0")
+        MovieList(
+            movies = listOf("Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5", "Movie 6", "Movie 7", "Movie 8", "Movie 9", "Movie 10")
+        )
     }
 }
