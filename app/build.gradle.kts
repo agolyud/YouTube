@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "app.hdrezka.youtubesun"
+    namespace = "app.youtube.sun"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "app.hdrezka.youtubesun"
+        applicationId = "app.youtube.sun"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

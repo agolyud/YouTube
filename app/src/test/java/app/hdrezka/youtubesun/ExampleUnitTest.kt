@@ -1,4 +1,4 @@
-package app.hdrezka.youtubesun
+package app.youtube.sun
 
 import org.junit.Test
 
