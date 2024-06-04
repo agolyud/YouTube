@@ -1,4 +1,4 @@
-package app.hdrezka.youtubesun.ui.theme
+package app.youtube.sun.ui.theme
 
 import android.app.Activity
 import android.os.Build
