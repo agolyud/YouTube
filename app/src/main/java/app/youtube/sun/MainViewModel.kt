@@ -1,4 +1,4 @@
-package app.youtube.sun.app.hdrezka.youtubesun
+package app.youtube.sun
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
