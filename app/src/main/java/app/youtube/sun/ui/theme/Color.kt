@@ -1,4 +1,4 @@
-package app.hdrezka.youtubesun.ui.theme
+package app.youtube.sun.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
