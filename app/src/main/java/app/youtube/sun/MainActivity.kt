@@ -17,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.youtube.sun.ui.theme.YouTubeSunTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
             YouTubeSunTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MovieList(
-                        movies = viewModel.movieList.collectAsState(initial = emptyList()).value,
+                        movies = viewModel.movieList.collectAsState(initial = emptyList()).value.map { it.snippet.title },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun MovieList(movies: List<String>, modifier: Modifier = Modifier) {

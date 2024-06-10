@@ -22,6 +22,7 @@ android {
         }
 
         buildConfigField("String", "API_VIDEOS", "\"https://www.googleapis.com/youtube/v3/\"")
+        buildConfigField("String", "API_KEY", "\"AIzaSyD0Yt0l0uKw0yI9d0q7yH8gA8z8U8z8U8z\"")
     }
 
     buildTypes {
@@ -72,6 +73,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

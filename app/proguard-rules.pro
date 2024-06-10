@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class dagger.** { *; }
+-keep interface dagger.** { *; }
+-keep class javax.inject.** { *; }
+-keep interface javax.inject.** { *; }
