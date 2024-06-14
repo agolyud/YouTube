@@ -1,6 +1,7 @@
-package app.youtube.sun.network
+package app.youtube.sun.data.network
 
 import app.youtube.sun.BuildConfig
+import app.youtube.sun.repositories.VideoRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

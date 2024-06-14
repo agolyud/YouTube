@@ -2,8 +2,8 @@ package app.youtube.sun
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.youtube.sun.network.Video
-import app.youtube.sun.network.VideoRepository
+import app.youtube.sun.data.Video
+import app.youtube.sun.repositories.VideoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

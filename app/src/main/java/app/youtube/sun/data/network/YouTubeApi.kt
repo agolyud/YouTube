@@ -1,5 +1,6 @@
-package app.youtube.sun.network
+package app.youtube.sun.data.network
 
+import app.youtube.sun.data.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
