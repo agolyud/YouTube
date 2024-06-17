@@ -2,7 +2,7 @@ package app.youtube.sun
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.youtube.sun.data.Video
+import app.youtube.sun.data.responses.VideoResponse
 import app.youtube.sun.repositories.VideoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +15,8 @@ class MainViewModel @Inject constructor(
     private val repository: VideoRepository
 ) : ViewModel() {
 
-    private val _movieList = MutableStateFlow<List<Video>>(emptyList())
-    val movieList: StateFlow<List<Video>> get() = _movieList
+    private val _movieList = MutableStateFlow<List<VideoResponse>>(emptyList())
+    val movieList: StateFlow<List<VideoResponse>> get() = _movieList
 
     init {
         viewModelScope.launch {
