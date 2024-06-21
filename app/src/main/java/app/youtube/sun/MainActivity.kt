@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.youtube.sun.data.objects.Movie
 import app.youtube.sun.ui.VideoCard
 import app.youtube.sun.ui.theme.YouTubeSunTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,10 +43,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Movie(
-    val title: String,
-    val thumbnailUrl: String
-)
 
 
 @Composable
