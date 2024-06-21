@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -66,16 +67,17 @@ fun MovieList(movies: List<Movie>, modifier: Modifier = Modifier) {
                 Log.d("MovieList", "Loading image: ${movie.thumbnailUrl}")
                 Image(
                     painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current).data(data = movie.thumbnailUrl)
-                            .apply(block = fun ImageRequest.Builder.() {
+                        ImageRequest.Builder(LocalContext.current).data(movie.thumbnailUrl)
+                            .apply {
                                 crossfade(true)
                                 placeholder(R.drawable.ic_placeholder)
                                 scale(Scale.FIT)
-                            }).build()
+                            }.build()
                     ),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(300.dp)
                         .padding(bottom = 8.dp)
                 )
                 Text(
