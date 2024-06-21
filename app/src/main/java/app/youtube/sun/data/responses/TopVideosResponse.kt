@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TopVideosResponse(
-    val items: List<VideoResponse>
+    val items: List<VideoResponse>,
+    val nextPageToken: String? = null
 )

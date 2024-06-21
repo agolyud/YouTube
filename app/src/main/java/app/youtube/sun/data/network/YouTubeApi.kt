@@ -11,6 +11,7 @@ interface YouTubeApi {
         @Query("regionCode") regionCode: String = "US",
         @Query("part") part: String = "snippet,contentDetails,statistics",
         @Query("maxResults") maxResults: Int = 10,
+        @Query("pageToken") pageToken: String? = null,
         @Query("key") apiKey: String
     ): TopVideosResponse
 }

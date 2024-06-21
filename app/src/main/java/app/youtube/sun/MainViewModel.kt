@@ -18,10 +18,19 @@ class MainViewModel @Inject constructor(
     private val _movieList = MutableStateFlow<List<VideoResponse>>(emptyList())
     val movieList: StateFlow<List<VideoResponse>> get() = _movieList
 
+    private val _nextPageToken = MutableStateFlow<String?>(null)
+    val nextPageToken: StateFlow<String?> get() = _nextPageToken
+
     init {
+        loadMoreVideos()
+    }
+
+    fun loadMoreVideos() {
         viewModelScope.launch {
             val apiKey = BuildConfig.API_KEY
-            _movieList.value = repository.getTopVideos(apiKey)
+            val response = repository.getTopVideos(apiKey, _nextPageToken.value)
+            _movieList.value = _movieList.value + response.items
+            _nextPageToken.value = response.nextPageToken
         }
     }
 }
