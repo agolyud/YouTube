@@ -13,6 +13,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 import okhttp3.MediaType.Companion.toMediaType
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import app.youtube.sun.data.objects.IoDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -68,7 +71,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(dataSource: YouTubeDataSource): VideoRepository {
-        return VideoRepository(dataSource)
+    fun provideVideoRepository(
+        dataSource: YouTubeDataSource,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): VideoRepository {
+        return VideoRepository(dataSource, ioDispatcher)
     }
 }

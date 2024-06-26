@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     MovieList(
                         movies = movies,
                         modifier = Modifier.padding(innerPadding),
-                        loadMore = { viewModel.loadMoreVideos() }
+                        loadMore = { viewModel.load() }
                     )
                 }
             }
