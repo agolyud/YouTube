@@ -15,23 +15,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: VideoRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    private val repository: VideoRepository
 ) : ViewModel() {
 
     private val _movieList = MutableStateFlow<List<VideoResponse>>(emptyList())
     val movieList: StateFlow<List<VideoResponse>> get() = _movieList
-
     private var _nextPageToken: String? = null
-    val nextPageToken: String? get() = _nextPageToken
 
     init {
         load()
     }
 
     fun load() {
-        viewModelScope.launch(mainDispatcher) {
+        viewModelScope.launch {
             val apiKey = BuildConfig.API_KEY
             val response = repository.getTopVideos(apiKey, _nextPageToken)
             _movieList.value = _movieList.value + response.items
