@@ -5,18 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import app.youtube.sun.data.objects.Movie
 import app.youtube.sun.ui.VideoCard
 import app.youtube.sun.ui.theme.YouTubeSunTheme
@@ -33,10 +36,33 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             YouTubeSunTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val items = listOf("Main", "Gaming", "Movies")
+                val icons = listOf(
+                    Icons.Filled.Home,
+                    Icons.Filled.SportsEsports,
+                    Icons.Filled.Movie
+                )
+                var selectedItem by remember { mutableStateOf(0) }
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NiaNavigationBar {
+                            items.forEachIndexed { index, item ->
+                                NiaNavigationBarItem(
+                                    icon = { Icon(icons[index], contentDescription = null) },
+                                    label = { Text(item) },
+                                    selected = selectedItem == index,
+                                    onClick = { selectedItem = index }
+                                )
+                            }
+                        }
+                    }
+                ) { innerPadding ->
                     val movies = viewModel.movieList.collectAsState(initial = emptyList()).value.map {
                         Movie(it.snippet.title, it.snippet.thumbnails.high.url)
                     }
+
                     MovieList(
                         movies = movies,
                         modifier = Modifier.padding(innerPadding),
@@ -60,6 +86,48 @@ fun MovieList(movies: List<Movie>, modifier: Modifier = Modifier, loadMore: () -
             VideoCard(movie = movie)
         }
     }
+}
+
+@Composable
+fun RowScope.NiaNavigationBarItem(
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    alwaysShowLabel: Boolean = true,
+    icon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = icon,
+    label: @Composable (() -> Unit)? = null,
+) {
+    NavigationBarItem(
+        selected = selected,
+        onClick = onClick,
+        icon = if (selected) selectedIcon else icon,
+        modifier = modifier,
+        enabled = enabled,
+        label = label,
+        alwaysShowLabel = alwaysShowLabel,
+        colors = NavigationBarItemDefaults.colors(
+            selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+    )
+}
+
+@Composable
+fun NiaNavigationBar(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
+    NavigationBar(
+        modifier = modifier,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        tonalElevation = 0.dp,
+        content = content,
+    )
 }
 
 @Preview(showBackground = true)

@@ -68,19 +68,20 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.coil.compose)
 
+    implementation(libs.material.icons.core)
+    implementation(libs.material.icons.extended)
+
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     kspAndroidTest(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
 
-//retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
-
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
