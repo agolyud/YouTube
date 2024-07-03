@@ -73,7 +73,7 @@ fun MainScreenContent(viewModel: MainViewModel) {
                 val movies = viewModel.movieList.collectAsState(initial = emptyList()).value.map {
                     Movie(it.snippet.title, it.snippet.thumbnails.high.url)
                 }
-                MainScreen(movies = movies, loadMore = { viewModel.load() }, modifier = Modifier.padding(innerPadding))
+                MovieListScreen(movies = movies, loadMore = { viewModel.load() }, modifier = Modifier.padding(innerPadding))
             }
             1 -> GamingScreen(modifier = Modifier.padding(innerPadding))
             2 -> MoviesScreen(modifier = Modifier.padding(innerPadding))
@@ -82,22 +82,7 @@ fun MainScreenContent(viewModel: MainViewModel) {
 }
 
 @Composable
-fun MovieList(movies: List<Movie>, modifier: Modifier = Modifier, loadMore: () -> Unit) {
-    LazyColumn(modifier = modifier) {
-        itemsIndexed(movies) { index, movie ->
-            if (index == movies.size - 1) {
-                LaunchedEffect(key1 = index) {
-                    loadMore()
-                }
-            }
-            VideoCard(movie = movie)
-        }
-    }
-}
-
-
-@Composable
-fun MainScreen(movies: List<Movie>, loadMore: () -> Unit, modifier: Modifier = Modifier) {
+fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
         itemsIndexed(movies) { index, movie ->
             if (index == movies.size - 1) {
@@ -114,7 +99,7 @@ fun MainScreen(movies: List<Movie>, loadMore: () -> Unit, modifier: Modifier = M
 @Composable
 fun MovieListPreview() {
     YouTubeSunTheme {
-        MovieList(
+        MovieListScreen(
             movies = listOf(
                 Movie("Movie 1", R.drawable.ic_placeholder.toString()),
                 Movie("Movie 2", R.drawable.ic_placeholder.toString()),
@@ -124,4 +109,3 @@ fun MovieListPreview() {
         )
     }
 }
-
