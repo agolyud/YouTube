@@ -1,4 +1,4 @@
-package app.youtube.sun.data.objects
+package app.youtube.sun.di
 
 import dagger.Module
 import dagger.Provides
@@ -19,10 +19,6 @@ object CoroutineModule {
     @IoDispatcher
     @Provides
     fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @MainDispatcher
-    @Provides
-    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }
 
 @Retention(AnnotationRetention.BINARY)
@@ -32,7 +28,3 @@ annotation class DefaultDispatcher
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
 annotation class IoDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class MainDispatcher

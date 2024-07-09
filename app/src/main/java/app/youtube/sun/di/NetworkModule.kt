@@ -1,6 +1,8 @@
-package app.youtube.sun.data.network
+package app.youtube.sun.di
 
 import app.youtube.sun.BuildConfig
+import app.youtube.sun.data.network.YouTubeApi
+import app.youtube.sun.data.network.YouTubeDataSource
 import app.youtube.sun.repositories.VideoRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -14,8 +16,6 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 import okhttp3.MediaType.Companion.toMediaType
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import app.youtube.sun.data.objects.IoDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)

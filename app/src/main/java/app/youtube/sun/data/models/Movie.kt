@@ -1,4 +1,4 @@
-package app.youtube.sun.data.objects
+package app.youtube.sun.data.models
 
 data class Movie(
     val title: String,
