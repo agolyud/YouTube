@@ -1,6 +1,7 @@
 package app.youtube.sun.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +18,8 @@ import coil.request.ImageRequest
 import coil.size.Scale
 
 @Composable
-fun VideoCard(movie: Movie, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(8.dp)) {
-
+fun VideoCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Column(modifier = modifier.padding(8.dp).clickable { onClick() }) {
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current).data(movie.thumbnailUrl)
@@ -41,3 +41,4 @@ fun VideoCard(movie: Movie, modifier: Modifier = Modifier) {
         )
     }
 }
+

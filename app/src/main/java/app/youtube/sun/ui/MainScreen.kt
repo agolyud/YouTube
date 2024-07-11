@@ -48,9 +48,14 @@ fun MainScreenContent(viewModel: MainViewModel) {
         when (selectedItem) {
             0 -> {
                 val movies = viewModel.movieList.collectAsState(initial = emptyList()).value.map {
-                    Movie(it.snippet.title, it.snippet.thumbnails.high.url)
+                    Movie(it.snippet.title, it.snippet.thumbnails.high.url, it.id)
                 }
-                MovieListScreen(movies = movies, loadMore = { viewModel.load() }, modifier = Modifier.padding(innerPadding))
+                MovieListScreen(
+                    movies = movies,
+                    loadMore = { viewModel.load() },
+                    onVideoClick = { videoId -> viewModel.fetchVideoDetails(videoId) },
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
             1 -> GamingScreen(modifier = Modifier.padding(innerPadding))
             2 -> MoviesScreen(modifier = Modifier.padding(innerPadding))
@@ -58,8 +63,9 @@ fun MainScreenContent(viewModel: MainViewModel) {
     }
 }
 
+
 @Composable
-fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, modifier: Modifier = Modifier) {
+fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (String) -> Unit, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
         itemsIndexed(movies) { index, movie ->
             if (index == movies.size - 1) {
@@ -67,7 +73,7 @@ fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, modifier: Modifie
                     loadMore()
                 }
             }
-            VideoCard(movie = movie)
+            VideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
         }
     }
 }

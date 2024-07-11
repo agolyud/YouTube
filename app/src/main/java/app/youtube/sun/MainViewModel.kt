@@ -1,5 +1,6 @@
 package app.youtube.sun
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.youtube.sun.data.responses.VideoResponse
@@ -31,5 +32,17 @@ class MainViewModel @Inject constructor(
             _nextPageToken = response.nextPageToken
         }
     }
+
+    fun fetchVideoDetails(videoId: String) {
+        viewModelScope.launch {
+            val apiKey = BuildConfig.API_KEY
+            val videoDetails = repository.getVideoDetails(videoId, apiKey)
+            videoDetails.items.forEach { item ->
+                Log.d("VideoDetails", "Video ID: ${item.id}, Title: ${item.snippet.title}, Description: ${item.snippet.description}")
+            }
+        }
+    }
+
+
 }
 

@@ -32,17 +32,17 @@ class MainActivity : ComponentActivity() {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun MovieListPreview() {
-    YouTubeSunTheme {
-        MovieListScreen(
-            movies = listOf(
-                Movie("Movie 1", R.drawable.ic_placeholder.toString()),
-                Movie("Movie 2", R.drawable.ic_placeholder.toString()),
-                Movie("Movie 3", R.drawable.ic_placeholder.toString())
-            ),
-            loadMore = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MovieListPreview() {
+//    YouTubeSunTheme {
+//        MovieListScreen(
+//            movies = listOf(
+//                Movie("Movie 1", R.drawable.ic_placeholder.toString()),
+//                Movie("Movie 2", R.drawable.ic_placeholder.toString()),
+//                Movie("Movie 3", R.drawable.ic_placeholder.toString())
+//            ),
+//            loadMore = {}
+//        )
+//    }
+//}
