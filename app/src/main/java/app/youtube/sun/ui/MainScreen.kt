@@ -12,12 +12,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
 import app.youtube.sun.MainViewModel
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
-fun MainScreenContent(viewModel: MainViewModel) {
+fun MainScreenContent(viewModel: MainViewModel, navController: NavHostController) {
     val items = listOf(
         stringResource(id = R.string.main),
         stringResource(id = R.string.gaming),
@@ -53,7 +56,13 @@ fun MainScreenContent(viewModel: MainViewModel) {
                 MovieListScreen(
                     movies = movies,
                     loadMore = { viewModel.load() },
-                    onVideoClick = { videoId -> viewModel.fetchVideoDetails(videoId) },
+                    onVideoClick = { videoId ->
+                        viewModel.fetchVideoDetails(videoId) { title, description ->
+                            val encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.toString())
+                            val encodedDescription = URLEncoder.encode(description, StandardCharsets.UTF_8.toString())
+                            navController.navigate("detailScreen/$encodedTitle/$encodedDescription")
+                        }
+                    },
                     modifier = Modifier.padding(innerPadding)
                 )
             }

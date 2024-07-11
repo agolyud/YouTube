@@ -33,16 +33,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun fetchVideoDetails(videoId: String) {
+    fun fetchVideoDetails(videoId: String, onDetailsFetched: (String, String) -> Unit) {
         viewModelScope.launch {
             val apiKey = BuildConfig.API_KEY
             val videoDetails = repository.getVideoDetails(videoId, apiKey)
-            videoDetails.items.forEach { item ->
+            videoDetails.items.firstOrNull()?.let { item ->
+                onDetailsFetched(item.snippet.title, item.snippet.description)
                 Log.d("VideoDetails", "Video ID: ${item.id}, Title: ${item.snippet.title}, Description: ${item.snippet.description}")
             }
         }
     }
-
-
 }
 
