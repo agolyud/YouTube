@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">YouTubeSun</string>
+    <string name="section_coming">Section coming soon</string>
+    <string name="main">Main</string>
+    <string name="gaming">Gaming</string>
+    <string name="movies">Movies</string>
 </resources>

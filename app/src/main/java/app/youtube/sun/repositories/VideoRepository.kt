@@ -2,7 +2,7 @@ package app.youtube.sun.repositories
 
 import app.youtube.sun.data.responses.TopVideosResponse
 import app.youtube.sun.data.network.YouTubeDataSource
-import app.youtube.sun.data.objects.IoDispatcher
+import app.youtube.sun.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
