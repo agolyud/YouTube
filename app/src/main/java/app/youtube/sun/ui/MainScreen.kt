@@ -1,6 +1,5 @@
 package app.youtube.sun.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -84,7 +83,7 @@ fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (St
                     loadMore()
                 }
             }
-            VideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
+            MainVideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
         }
     }
 }

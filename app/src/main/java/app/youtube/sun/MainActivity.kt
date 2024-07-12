@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import app.youtube.sun.data.models.Movie
-import app.youtube.sun.ui.DetailScreen
+import app.youtube.sun.ui.VideoScreen
 import app.youtube.sun.ui.MainScreenContent
 import app.youtube.sun.ui.MovieListScreen
 import app.youtube.sun.ui.theme.YouTubeSunTheme
@@ -44,7 +44,9 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val title = backStackEntry.arguments?.getString("title") ?: ""
                         val description = backStackEntry.arguments?.getString("description") ?: ""
-                        DetailScreen(title = title, description = description)
+                        VideoScreen(title = title, description = description, onBackClick = {
+                            navController.navigateUp()
+                        })
                     }
                 }
             }
