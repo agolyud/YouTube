@@ -1,5 +1,6 @@
 package app.youtube.sun.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,8 +17,9 @@ import androidx.navigation.NavHostController
 import app.youtube.sun.MainViewModel
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
-import java.net.URLEncoder
+import java.util.Base64
 import java.nio.charset.StandardCharsets
+
 
 @Composable
 fun MainScreenContent(viewModel: MainViewModel, navController: NavHostController) {
@@ -58,8 +60,8 @@ fun MainScreenContent(viewModel: MainViewModel, navController: NavHostController
                     loadMore = { viewModel.load() },
                     onVideoClick = { videoId ->
                         viewModel.fetchVideoDetails(videoId) { title, description ->
-                            val encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.toString())
-                            val encodedDescription = URLEncoder.encode(description, StandardCharsets.UTF_8.toString())
+                            val encodedTitle = Base64.getUrlEncoder().encodeToString(title.toByteArray(StandardCharsets.UTF_8))
+                            val encodedDescription = Base64.getUrlEncoder().encodeToString(description.toByteArray(StandardCharsets.UTF_8))
                             navController.navigate("detailScreen/$encodedTitle/$encodedDescription")
                         }
                     },

@@ -8,13 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import java.net.URLDecoder
+import java.util.Base64
 import java.nio.charset.StandardCharsets
 
 @Composable
 fun DetailScreen(title: String, description: String, modifier: Modifier = Modifier) {
-    val decodedTitle = URLDecoder.decode(title, StandardCharsets.UTF_8.toString())
-    val decodedDescription = URLDecoder.decode(description, StandardCharsets.UTF_8.toString())
+    val decodedTitle = String(Base64.getUrlDecoder().decode(title), StandardCharsets.UTF_8)
+    val decodedDescription = String(Base64.getUrlDecoder().decode(description), StandardCharsets.UTF_8)
 
     Scaffold(
         modifier = modifier.fillMaxSize()
