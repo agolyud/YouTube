@@ -13,12 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import app.youtube.sun.data.models.Movie
-import app.youtube.sun.ui.VideoScreen
-import app.youtube.sun.ui.MainScreenContent
-import app.youtube.sun.ui.MovieListScreen
+import app.youtube.sun.ui.detail.VideoDetailScreen
+import app.youtube.sun.ui.list.VideoListScreenContent
+import app.youtube.sun.ui.list.MovieListScreen
 import app.youtube.sun.ui.theme.YouTubeSunTheme
-import app.youtube.sun.viewmodels.VideoDetailViewModel
-import app.youtube.sun.viewmodels.VideoListViewModel
+import app.youtube.sun.ui.detail.VideoDetailViewModel
+import app.youtube.sun.ui.list.VideoListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
-                        MainScreenContent(videoListViewModel, videoDetailViewModel, navController)
+                        VideoListScreenContent(videoListViewModel, videoDetailViewModel, navController)
                     }
                     composable(
                         "detailScreen/{title}/{description}",
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val title = backStackEntry.arguments?.getString("title") ?: ""
                         val description = backStackEntry.arguments?.getString("description") ?: ""
-                        VideoScreen(title = title, description = description, onBackClick = {
+                        VideoDetailScreen(title = title, description = description, onBackClick = {
                             navController.navigateUp()
                         })
                     }

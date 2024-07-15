@@ -1,4 +1,4 @@
-package app.youtube.sun.viewmodels
+package app.youtube.sun.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

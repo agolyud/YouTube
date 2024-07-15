@@ -1,4 +1,4 @@
-package app.youtube.sun.ui
+package app.youtube.sun.ui.list
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,14 +15,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
-import app.youtube.sun.viewmodels.VideoDetailViewModel
-import app.youtube.sun.viewmodels.VideoListViewModel
+import app.youtube.sun.ui.VideoCard
+import app.youtube.sun.ui.gaming.GamingScreen
+import app.youtube.sun.ui.movies.MoviesScreen
+import app.youtube.sun.ui.NiaNavigationBar
+import app.youtube.sun.ui.NiaNavigationBarItem
+import app.youtube.sun.ui.detail.VideoDetailViewModel
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
 
 @Composable
-fun MainScreenContent(
+fun VideoListScreenContent(
     videoListViewModel: VideoListViewModel,
     videoDetailViewModel: VideoDetailViewModel,
     navController: NavHostController
@@ -88,7 +92,7 @@ fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (St
                     loadMore()
                 }
             }
-            MainVideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
+            VideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
         }
     }
 }

@@ -1,4 +1,4 @@
-package app.youtube.sun.ui
+package app.youtube.sun.ui.gaming
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

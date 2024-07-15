@@ -1,4 +1,4 @@
-package app.youtube.sun.ui
+package app.youtube.sun.ui.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoScreen(title: String, description: String, modifier: Modifier = Modifier, onBackClick: () -> Unit) {
+fun VideoDetailScreen(title: String, description: String, modifier: Modifier = Modifier, onBackClick: () -> Unit) {
     val decodedTitle = String(Base64.getUrlDecoder().decode(title), StandardCharsets.UTF_8)
     val decodedDescription = String(Base64.getUrlDecoder().decode(description), StandardCharsets.UTF_8)
 

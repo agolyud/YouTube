@@ -18,7 +18,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 
 @Composable
-fun MainVideoCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun VideoCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(modifier = modifier.padding(8.dp).clickable { onClick() }) {
         Image(
             painter = rememberAsyncImagePainter(
