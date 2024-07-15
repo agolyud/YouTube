@@ -17,12 +17,15 @@ import app.youtube.sun.ui.VideoScreen
 import app.youtube.sun.ui.MainScreenContent
 import app.youtube.sun.ui.MovieListScreen
 import app.youtube.sun.ui.theme.YouTubeSunTheme
+import app.youtube.sun.viewmodels.VideoDetailViewModel
+import app.youtube.sun.viewmodels.VideoListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels()
+    private val videoListViewModel: VideoListViewModel by viewModels()
+    private val videoDetailViewModel: VideoDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
-                        MainScreenContent(viewModel, navController)
+                        MainScreenContent(videoListViewModel, videoDetailViewModel, navController)
                     }
                     composable(
                         "detailScreen/{title}/{description}",

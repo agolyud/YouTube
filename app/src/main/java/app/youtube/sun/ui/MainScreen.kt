@@ -13,15 +13,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import app.youtube.sun.MainViewModel
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
+import app.youtube.sun.viewmodels.VideoDetailViewModel
+import app.youtube.sun.viewmodels.VideoListViewModel
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
 
 @Composable
-fun MainScreenContent(viewModel: MainViewModel, navController: NavHostController) {
+fun MainScreenContent(
+    videoListViewModel: VideoListViewModel,
+    videoDetailViewModel: VideoDetailViewModel,
+    navController: NavHostController
+) {
     val items = listOf(
         stringResource(id = R.string.main),
         stringResource(id = R.string.gaming),
@@ -51,14 +56,14 @@ fun MainScreenContent(viewModel: MainViewModel, navController: NavHostController
     ) { innerPadding ->
         when (selectedItem) {
             0 -> {
-                val movies = viewModel.movieList.collectAsState(initial = emptyList()).value.map {
+                val movies = videoListViewModel.movieList.collectAsState(initial = emptyList()).value.map {
                     Movie(it.snippet.title, it.snippet.thumbnails.high.url, it.id)
                 }
                 MovieListScreen(
                     movies = movies,
-                    loadMore = { viewModel.load() },
+                    loadMore = { videoListViewModel.load() },
                     onVideoClick = { videoId ->
-                        viewModel.fetchVideoDetails(videoId) { title, description ->
+                        videoDetailViewModel.fetchVideoDetails(videoId) { title, description ->
                             val encodedTitle = Base64.getUrlEncoder().encodeToString(title.toByteArray(StandardCharsets.UTF_8))
                             val encodedDescription = Base64.getUrlEncoder().encodeToString(description.toByteArray(StandardCharsets.UTF_8))
                             navController.navigate("detailScreen/$encodedTitle/$encodedDescription")

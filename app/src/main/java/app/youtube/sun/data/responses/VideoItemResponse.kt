@@ -3,10 +3,7 @@ package app.youtube.sun.data.responses
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VideoDetailResponse(
-    val items: List<VideoItem>
+data class VideoItem(
+    val id: String,
+    val snippet: SnippetResponse
 )
-
-
-
-
