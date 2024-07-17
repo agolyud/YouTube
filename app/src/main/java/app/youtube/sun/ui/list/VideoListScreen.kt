@@ -17,13 +17,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
-import app.youtube.sun.repositories.FakeVideoRepository
 import app.youtube.sun.ui.VideoCard
 import app.youtube.sun.ui.gaming.GamingScreen
 import app.youtube.sun.ui.movies.MoviesScreen
 import app.youtube.sun.ui.NiaNavigationBar
 import app.youtube.sun.ui.NiaNavigationBarItem
 import app.youtube.sun.ui.detail.VideoDetailViewModel
+import app.youtube.sun.ui.theme.YouTubeSunTheme
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
@@ -66,7 +66,7 @@ fun VideoListScreenContent(
                 val movies = videoListViewModel.movieList.collectAsState(initial = emptyList()).value.map {
                     Movie(it.snippet.title, it.snippet.thumbnails.high.url, it.id)
                 }
-                MovieListScreen(
+                VideoListScreen(
                     movies = movies,
                     loadMore = { videoListViewModel.load() },
                     onVideoClick = { videoId ->
@@ -85,9 +85,13 @@ fun VideoListScreenContent(
     }
 }
 
-
 @Composable
-fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (String) -> Unit, modifier: Modifier = Modifier) {
+fun VideoListScreen(
+    movies: List<Movie>,
+    loadMore: () -> Unit,
+    onVideoClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(modifier = modifier) {
         itemsIndexed(movies) { index, movie ->
             if (index == movies.size - 1) {
@@ -104,12 +108,15 @@ fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (St
 @Preview(showBackground = true)
 @Composable
 fun VideoListScreenContentPreview() {
-    val dummyViewModel = VideoListViewModel(FakeVideoRepository())
-    val dummyDetailViewModel = VideoDetailViewModel(FakeVideoRepository())
-    val navController = rememberNavController()
-    VideoListScreenContent(
-        videoListViewModel = dummyViewModel,
-        videoDetailViewModel = dummyDetailViewModel,
-        navController = navController
-    )
+    YouTubeSunTheme {
+        VideoListScreen(
+            movies = listOf(
+                Movie("Movie 1", R.drawable.ic_placeholder.toString(), "id1"),
+                Movie("Movie 2", R.drawable.ic_placeholder.toString(), "id2"),
+                Movie("Movie 3", R.drawable.ic_placeholder.toString(), "id3")
+            ),
+            loadMore = {},
+            onVideoClick = { _ -> }
+        )
+    }
 }
