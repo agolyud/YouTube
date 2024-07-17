@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
@@ -42,3 +43,12 @@ fun VideoCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
     }
 }
 
+
+@Preview(showBackground = true)
+@Composable
+fun VideoCardPreview() {
+    VideoCard(
+        movie = Movie("Video", R.drawable.ic_placeholder.toString(), "1"),
+        onClick = {}
+    )
+}

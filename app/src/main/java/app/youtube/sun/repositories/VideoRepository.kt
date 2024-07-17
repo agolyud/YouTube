@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class VideoRepository @Inject constructor(
+open class VideoRepository @Inject constructor(
     private val dataSource: YouTubeDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {

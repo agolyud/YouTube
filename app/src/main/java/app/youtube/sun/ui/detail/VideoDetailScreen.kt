@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.youtube.sun.ui.theme.YouTubeSunTheme
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
@@ -40,5 +42,20 @@ fun VideoDetailScreen(title: String, description: String, modifier: Modifier = M
             Text(text = decodedTitle, modifier = Modifier.padding(bottom = 8.dp))
             Text(text = decodedDescription)
         }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun VideoDetailScreenPreview() {
+    val title = Base64.getUrlEncoder().encodeToString("Title".toByteArray(StandardCharsets.UTF_8))
+    val description = Base64.getUrlEncoder().encodeToString("Description".toByteArray(StandardCharsets.UTF_8))
+    YouTubeSunTheme {
+        VideoDetailScreen(
+            title = title,
+            description = description,
+            onBackClick = {}
+        )
     }
 }

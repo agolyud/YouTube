@@ -12,9 +12,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import app.youtube.sun.R
 import app.youtube.sun.data.models.Movie
+import app.youtube.sun.repositories.FakeVideoRepository
 import app.youtube.sun.ui.VideoCard
 import app.youtube.sun.ui.gaming.GamingScreen
 import app.youtube.sun.ui.movies.MoviesScreen
@@ -95,4 +98,18 @@ fun MovieListScreen(movies: List<Movie>, loadMore: () -> Unit, onVideoClick: (St
             VideoCard(movie = movie, onClick = { onVideoClick(movie.id) })
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun VideoListScreenContentPreview() {
+    val dummyViewModel = VideoListViewModel(FakeVideoRepository())
+    val dummyDetailViewModel = VideoDetailViewModel(FakeVideoRepository())
+    val navController = rememberNavController()
+    VideoListScreenContent(
+        videoListViewModel = dummyViewModel,
+        videoDetailViewModel = dummyDetailViewModel,
+        navController = navController
+    )
 }
