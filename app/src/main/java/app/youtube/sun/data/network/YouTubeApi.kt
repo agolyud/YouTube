@@ -1,6 +1,7 @@
 package app.youtube.sun.data.network
 
 import app.youtube.sun.data.responses.TopVideosResponse
+import app.youtube.sun.data.responses.VideoDetailResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,4 +15,11 @@ interface YouTubeApi {
         @Query("pageToken") pageToken: String? = null,
         @Query("key") apiKey: String
     ): TopVideosResponse
+
+    @GET("videos")
+    suspend fun getVideoDetails(
+        @Query("id") videoId: String,
+        @Query("part") part: String = "snippet",
+        @Query("key") apiKey: String
+    ): VideoDetailResponse
 }

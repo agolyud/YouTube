@@ -1,7 +1,8 @@
-package app.youtube.sun
+package app.youtube.sun.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.youtube.sun.BuildConfig
 import app.youtube.sun.data.responses.VideoResponse
 import app.youtube.sun.repositories.VideoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class VideoListViewModel @Inject constructor(
     private val repository: VideoRepository
 ) : ViewModel() {
 
@@ -32,4 +33,3 @@ class MainViewModel @Inject constructor(
         }
     }
 }
-

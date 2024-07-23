@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "app.youtube.sun"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -70,6 +70,7 @@ dependencies {
 
     implementation(libs.material.icons.core)
     implementation(libs.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
 
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
