@@ -12,4 +12,5 @@
     <string name="IN">Индия</string>
     <string name="filter">Фильтр</string>
     <string name="select_country">Выберите страну</string>
+    <string name="close">Закрыть</string>
 </resources>

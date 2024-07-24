@@ -78,7 +78,7 @@ fun FilterDialog(
         },
         confirmButton = {
             Text(
-                text = "Close",
+                text = stringResource(id = R.string.close),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .clickable { onDismiss() },
