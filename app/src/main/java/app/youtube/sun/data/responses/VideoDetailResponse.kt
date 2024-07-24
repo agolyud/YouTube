@@ -6,7 +6,3 @@ import kotlinx.serialization.Serializable
 data class VideoDetailResponse(
     val items: List<VideoItem>
 )
-
-
-
-
