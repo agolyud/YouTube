@@ -12,9 +12,9 @@ open class VideoRepository @Inject constructor(
     private val dataSource: YouTubeDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getTopVideos(apiKey: String, pageToken: String? = null): TopVideosResponse {
+    suspend fun getTopVideos(apiKey: String, pageToken: String? = null, regionCode: String): TopVideosResponse {
         return withContext(ioDispatcher) {
-            dataSource.fetchTopVideos(apiKey, pageToken)
+            dataSource.fetchTopVideos(apiKey, pageToken, regionCode)
         }
     }
 

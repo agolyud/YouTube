@@ -21,6 +21,7 @@ import app.youtube.sun.ui.NiaNavigationBarPreview
 import app.youtube.sun.ui.detail.VideoDetailScreen
 import app.youtube.sun.ui.theme.YouTubeSunTheme
 import app.youtube.sun.ui.detail.VideoDetailViewModel
+import app.youtube.sun.ui.filter.FilterViewModel
 import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.main.MainScreen
@@ -31,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val videoListViewModel: VideoListViewModel by viewModels()
     private val videoDetailViewModel: VideoDetailViewModel by viewModels()
+    private val filterViewModel: FilterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,12 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
-                        MainScreen(videoListViewModel, videoDetailViewModel, navController)
+                        MainScreen(
+                            videoListViewModel = videoListViewModel,
+                            videoDetailViewModel = videoDetailViewModel,
+                            filterViewModel = filterViewModel,
+                            navController = navController
+                        )
                     }
                     composable(
                         "detailScreen/{title}/{description}",
@@ -52,15 +59,18 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val title = backStackEntry.arguments?.getString("title") ?: ""
                         val description = backStackEntry.arguments?.getString("description") ?: ""
-                        VideoDetailScreen(title = title, description = description, onBackClick = {
-                            navController.navigateUp()
-                        })
+                        VideoDetailScreen(
+                            title = title,
+                            description = description,
+                            onBackClick = { navController.navigateUp() }
+                        )
                     }
                 }
             }
         }
     }
 }
+
 
 
 @Preview(showBackground = true)

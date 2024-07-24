@@ -1,6 +1,5 @@
 package app.youtube.sun.ui.main
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -8,7 +7,6 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +23,7 @@ import app.youtube.sun.ui.NiaNavigationBar
 import app.youtube.sun.ui.NiaNavigationBarItem
 import app.youtube.sun.ui.detail.VideoDetailViewModel
 import app.youtube.sun.ui.filter.FilterDialog
+import app.youtube.sun.ui.filter.FilterViewModel
 import app.youtube.sun.ui.gaming.GamingScreen
 import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
@@ -37,6 +36,7 @@ import java.nio.charset.StandardCharsets
 fun MainScreen(
     videoListViewModel: VideoListViewModel,
     videoDetailViewModel: VideoDetailViewModel,
+    filterViewModel: FilterViewModel,
     navController: NavHostController
 ) {
     val items = listOf(
@@ -51,7 +51,12 @@ fun MainScreen(
     )
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf("US") }
+    val scope = rememberCoroutineScope()
+    val selectedCountry by filterViewModel.selectedCountry.collectAsState()
+
+    LaunchedEffect(selectedCountry) {
+        videoListViewModel.reload(selectedCountry)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -85,7 +90,7 @@ fun MainScreen(
                 }
                 VideoListScreen(
                     movies = movies,
-                    loadMore = { videoListViewModel.load() },
+                    loadMore = { videoListViewModel.load(selectedCountry) },
                     onVideoClick = { videoId ->
                         videoDetailViewModel.fetchVideoDetails(videoId) { title, description ->
                             val encodedTitle = Base64.getUrlEncoder().encodeToString(title.toByteArray(StandardCharsets.UTF_8))
@@ -103,8 +108,13 @@ fun MainScreen(
             FilterDialog(
                 onDismiss = { isFilterDialogVisible = false },
                 selectedCountry = selectedCountry,
-                onCountryChange = { selectedCountry = it }
+                onCountryChange = { countryCode ->
+                    filterViewModel.updateCountry(countryCode)
+                    videoListViewModel.reload(countryCode)
+                    isFilterDialogVisible = false
+                }
             )
         }
     }
 }
+
