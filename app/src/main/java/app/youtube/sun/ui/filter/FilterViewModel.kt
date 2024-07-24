@@ -15,8 +15,8 @@ class FilterViewModel @Inject constructor(
     private val countryPreferences: CountryPreferences
 ) : ViewModel() {
 
-    private val _selectedCountry = MutableStateFlow("US")
-    val selectedCountry: StateFlow<String> get() = _selectedCountry
+    private val _selectedCountry = MutableStateFlow<String?>(null)
+    val selectedCountry: StateFlow<String?> get() = _selectedCountry
 
     init {
         viewModelScope.launch {

@@ -51,18 +51,25 @@ fun MainScreen(
     )
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
 
+
     LaunchedEffect(selectedCountry) {
-        videoListViewModel.reload(selectedCountry)
+        selectedCountry?.let {
+            videoListViewModel.reload(it)
+        }
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text(text = "") },
+                title = { Text(text = when (selectedItem) {
+                    0 -> stringResource(id = R.string.main)
+                    1 -> stringResource(id = R.string.gaming)
+                    2 -> stringResource(id = R.string.movies)
+                    else -> stringResource(id = R.string.main)
+                }) },
                 actions = {
                     IconButton(onClick = { isFilterDialogVisible = true }) {
                         Icon(imageVector = Icons.Filled.FilterList, contentDescription = "Filter")
@@ -90,7 +97,7 @@ fun MainScreen(
                 }
                 VideoListScreen(
                     movies = movies,
-                    loadMore = { videoListViewModel.load(selectedCountry) },
+                    loadMore = { selectedCountry?.let { videoListViewModel.load(it) } },
                     onVideoClick = { videoId ->
                         videoDetailViewModel.fetchVideoDetails(videoId) { title, description ->
                             val encodedTitle = Base64.getUrlEncoder().encodeToString(title.toByteArray(StandardCharsets.UTF_8))
@@ -107,10 +114,9 @@ fun MainScreen(
         if (isFilterDialogVisible) {
             FilterDialog(
                 onDismiss = { isFilterDialogVisible = false },
-                selectedCountry = selectedCountry,
+                selectedCountry = selectedCountry ?: "US",
                 onCountryChange = { countryCode ->
                     filterViewModel.updateCountry(countryCode)
-                    videoListViewModel.reload(countryCode)
                     isFilterDialogVisible = false
                 }
             )
