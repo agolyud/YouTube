@@ -20,16 +20,20 @@ class VideoListViewModel @Inject constructor(
     val movieList: StateFlow<List<VideoResponse>> get() = _movieList
     private var _nextPageToken: String? = null
 
-    init {
-        load()
-    }
-
-    fun load() {
+    fun load(countryCode: String = "US") {
         viewModelScope.launch {
             val apiKey = BuildConfig.API_KEY
-            val response = repository.getTopVideos(apiKey, _nextPageToken)
+            val response = repository.getTopVideos(apiKey, _nextPageToken, countryCode)
             _movieList.value += response.items
             _nextPageToken = response.nextPageToken
+        }
+    }
+
+    fun reload(countryCode: String = "US") {
+        viewModelScope.launch {
+            _movieList.value = emptyList()
+            _nextPageToken = null
+            load(countryCode)
         }
     }
 }

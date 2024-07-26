@@ -4,4 +4,12 @@
     <string name="main">Main</string>
     <string name="gaming">Gaming</string>
     <string name="movies">Movies</string>
+    <string name="US">United States</string>
+    <string name="RU">Russia</string>
+    <string name="CA">Canada</string>
+    <string name="DE">Germany</string>
+    <string name="IN">India</string>
+    <string name="filter">Filter</string>
+    <string name="select_country">Select Country</string>
+    <string name="close">Close</string>
 </resources>

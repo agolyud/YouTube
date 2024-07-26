@@ -4,8 +4,8 @@ import app.youtube.sun.data.responses.TopVideosResponse
 import app.youtube.sun.data.responses.VideoDetailResponse
 
 class YouTubeDataSource(private val api: YouTubeApi) {
-    suspend fun fetchTopVideos(apiKey: String, pageToken: String? = null): TopVideosResponse {
-        return api.getTopVideos(apiKey = apiKey, pageToken = pageToken)
+    suspend fun fetchTopVideos(apiKey: String, pageToken: String? = null, regionCode: String): TopVideosResponse {
+        return api.getTopVideos(apiKey = apiKey, pageToken = pageToken, regionCode = regionCode)
     }
 
     suspend fun fetchVideoDetails(videoId: String, apiKey: String): VideoDetailResponse {

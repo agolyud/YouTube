@@ -5,4 +5,12 @@
     <string name="main">Главный</string>
     <string name="gaming">Видеоигры</string>
     <string name="movies">Фильмы</string>
+    <string name="US">Соединенные Штаты</string>
+    <string name="RU">Россия</string>
+    <string name="CA">Канада</string>
+    <string name="DE">Германия</string>
+    <string name="IN">Индия</string>
+    <string name="filter">Фильтр</string>
+    <string name="select_country">Выберите страну</string>
+    <string name="close">Закрыть</string>
 </resources>
