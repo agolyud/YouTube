@@ -52,7 +52,7 @@ fun MainScreen(
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
-
+    val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
 
     LaunchedEffect(selectedCountry) {
         selectedCountry?.let {
@@ -115,8 +115,13 @@ fun MainScreen(
             FilterDialog(
                 onDismiss = { isFilterDialogVisible = false },
                 selectedCountry = selectedCountry ?: "US",
+                selectedLanguage = selectedLanguage ?: "en",
                 onCountryChange = { countryCode ->
                     filterViewModel.updateCountry(countryCode)
+                    isFilterDialogVisible = false
+                },
+                onLanguageChange = { languageCode ->
+                    filterViewModel.updateLanguage(languageCode)
                     isFilterDialogVisible = false
                 }
             )

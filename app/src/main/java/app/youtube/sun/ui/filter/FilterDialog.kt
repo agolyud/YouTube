@@ -27,14 +27,18 @@ import kotlinx.coroutines.launch
 fun FilterDialog(
     onDismiss: () -> Unit,
     selectedCountry: String,
+    selectedLanguage: String,
     onCountryChange: (String) -> Unit,
+    onLanguageChange: (String) -> Unit
 ) {
     val countries = listOf(
         stringResource(id = R.string.US) to "US",
-        stringResource(id = R.string.RU) to "RU",
-        stringResource(id = R.string.CA) to "CA",
-        stringResource(id = R.string.DE) to "DE",
-        stringResource(id = R.string.IN) to "IN"
+        stringResource(id = R.string.RU) to "RU"
+    )
+
+    val languages = listOf(
+        stringResource(id = R.string.english) to "en",
+        stringResource(id = R.string.russian) to "ru"
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -57,7 +61,6 @@ fun FilterDialog(
                                     onClick = {
                                         coroutineScope.launch {
                                             onCountryChange(countryCode)
-                                            onDismiss()
                                         }
                                     }
                                 )
@@ -69,6 +72,34 @@ fun FilterDialog(
                             )
                             Text(
                                 text = countryName,
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                }
+
+                Text(stringResource(id = R.string.language), Modifier.padding(top = 16.dp))
+                Column(Modifier.selectableGroup()) {
+                    languages.forEach { (languageName, languageCode) ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = selectedLanguage == languageCode,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            onLanguageChange(languageCode)
+                                        }
+                                    }
+                                )
+                                .padding(16.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedLanguage == languageCode,
+                                onClick = null
+                            )
+                            Text(
+                                text = languageName,
                                 modifier = Modifier.padding(start = 16.dp)
                             )
                         }
@@ -95,6 +126,8 @@ fun PreviewFilterDialog() {
     FilterDialog(
         onDismiss = {},
         selectedCountry = "US",
-        onCountryChange = {}
+        selectedLanguage = "en",
+        onCountryChange = {},
+        onLanguageChange = {}
     )
 }

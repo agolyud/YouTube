@@ -13,4 +13,7 @@
     <string name="filter">Фильтр</string>
     <string name="select_country">Выберите страну</string>
     <string name="close">Закрыть</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+    <string name="language">Язык</string>
 </resources>

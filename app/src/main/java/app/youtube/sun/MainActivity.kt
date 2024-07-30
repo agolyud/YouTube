@@ -26,6 +26,7 @@ import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.main.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -41,6 +42,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             YouTubeSunTheme {
                 val navController = rememberNavController()
+
+                // Observe language changes and update locale
+                val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
+                LaunchedEffect(selectedLanguage) {
+                    selectedLanguage?.let {
+                        val locale = Locale(it)
+                        Locale.setDefault(locale)
+                        val config = resources.configuration
+                        config.setLocale(locale)
+                        resources.updateConfiguration(config, resources.displayMetrics)
+                    }
+                }
+
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
                         MainScreen(
@@ -70,6 +84,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 
 
