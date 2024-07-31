@@ -28,9 +28,15 @@ class FilterViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _selectedCountry.value = countryPreferences.selectedCountry.first() ?: "US"
-            val deviceLanguage = Locale.getDefault().language
-            _selectedLanguage.value = countryPreferences.selectedLanguage.first() ?: deviceLanguage
-            updateLocale(_selectedLanguage.value!!)
+            val savedLanguage = countryPreferences.selectedLanguage.first()
+            if (savedLanguage != null) {
+                _selectedLanguage.value = savedLanguage
+                updateLocale(savedLanguage)
+            } else {
+                val deviceLanguage = Locale.getDefault().language
+                _selectedLanguage.value = deviceLanguage
+                countryPreferences.saveLanguage(deviceLanguage)
+            }
         }
     }
 
