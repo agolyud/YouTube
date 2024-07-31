@@ -30,6 +30,7 @@ class FilterViewModel @Inject constructor(
         viewModelScope.launch {
             _selectedCountry.value = countryPreferences.selectedCountry.first() ?: "US"
             _selectedLanguage.value = countryPreferences.selectedLanguage.first() ?: "en"
+            updateLocale(_selectedLanguage.value!!)
         }
     }
 
