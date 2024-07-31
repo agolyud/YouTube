@@ -3,7 +3,6 @@ package app.youtube.sun.ui.filter
 import android.app.Application
 import android.content.res.Configuration
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.youtube.sun.data.preferences.CountryPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +28,8 @@ class FilterViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _selectedCountry.value = countryPreferences.selectedCountry.first() ?: "US"
-            _selectedLanguage.value = countryPreferences.selectedLanguage.first() ?: "en"
+            val deviceLanguage = Locale.getDefault().language
+            _selectedLanguage.value = countryPreferences.selectedLanguage.first() ?: deviceLanguage
             updateLocale(_selectedLanguage.value!!)
         }
     }
