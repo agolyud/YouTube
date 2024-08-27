@@ -46,10 +46,18 @@ fun FilterDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = stringResource(id = R.string.filter), style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = stringResource(id = R.string.filter),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
         },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 24.dp)
+            ) {
                 Text(stringResource(id = R.string.select_country))
                 Column(Modifier.selectableGroup()) {
                     countries.forEach { (countryName, countryCode) ->
@@ -64,7 +72,7 @@ fun FilterDialog(
                                         }
                                     }
                                 )
-                                .padding(16.dp)
+                                .padding(8.dp)
                         ) {
                             RadioButton(
                                 selected = selectedCountry == countryCode,
@@ -92,7 +100,7 @@ fun FilterDialog(
                                         }
                                     }
                                 )
-                                .padding(16.dp)
+                                .padding(8.dp)
                         ) {
                             RadioButton(
                                 selected = selectedLanguage == languageCode,
@@ -111,12 +119,17 @@ fun FilterDialog(
             Text(
                 text = stringResource(id = R.string.close),
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(16.dp)
                     .clickable { onDismiss() },
                 color = MaterialTheme.colorScheme.primary
             )
         },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        ),
+        modifier = Modifier.padding(16.dp)
     )
 }
 
