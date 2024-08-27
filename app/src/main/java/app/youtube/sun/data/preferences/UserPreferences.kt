@@ -1,7 +1,6 @@
 package app.youtube.sun.data.preferences
 
 import android.content.Context
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -13,7 +12,7 @@ import javax.inject.Singleton
 private val Context.dataStore by preferencesDataStore(name = "country_preferences")
 
 @Singleton
-class CountryPreferences @Inject constructor(private val context: Context) {
+class UserPreferences @Inject constructor(private val context: Context) {
 
     private val COUNTRY_KEY = stringPreferencesKey("country_key")
     private val LANGUAGE_KEY = stringPreferencesKey("language_key")
