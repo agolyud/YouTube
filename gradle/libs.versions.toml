@@ -19,7 +19,8 @@ kotlinxSerializationJson = "1.6.3"
 materialIcons = "1.6.8"
 navigationCompose = "2.7.7"
 datastoreCoreAndroid = "1.1.1"
-
+protobuf = "3.24.3"
+protobufKotlinLite = "3.24.3"
 
 
 [libraries]
@@ -51,6 +52,10 @@ material-icons-extended = { group = "androidx.compose.material", name = "materia
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCoreAndroid" }
+protobuf = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobufKotlinLite" }
+protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -58,3 +63,4 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+protobuf = { id = "com.google.protobuf", version = "0.9.3" }

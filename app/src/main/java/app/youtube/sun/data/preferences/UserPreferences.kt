@@ -1,41 +1,68 @@
 package app.youtube.sun.data.preferences
 
 import android.content.Context
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.Serializer
+import androidx.datastore.dataStore
+import app.youtube.sun.data.preferences.UserPreferencesProto.UserPreferences
+import com.google.protobuf.InvalidProtocolBufferException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.dataStore by preferencesDataStore(name = "country_preferences")
+
+private val Context.userPreferencesDataStore: DataStore<UserPreferences> by dataStore(
+    fileName = "user_prefs.pb",
+    serializer = UserPreferencesSerializer
+)
 
 @Singleton
 class UserPreferences @Inject constructor(private val context: Context) {
 
-    private val COUNTRY_KEY = stringPreferencesKey("country_key")
-    private val LANGUAGE_KEY = stringPreferencesKey("language_key")
+    private val dataStore = context.userPreferencesDataStore
 
-    val selectedCountry: Flow<String?> = context.dataStore.data
+    val selectedCountry: Flow<String?> = dataStore.data
         .map { preferences ->
-            preferences[COUNTRY_KEY]
+            preferences.countryCode
         }
 
-    val selectedLanguage: Flow<String?> = context.dataStore.data
+    val selectedLanguage: Flow<String?> = dataStore.data
         .map { preferences ->
-            preferences[LANGUAGE_KEY]
+            preferences.languageCode
         }
 
     suspend fun saveCountry(countryCode: String) {
-        context.dataStore.edit { preferences ->
-            preferences[COUNTRY_KEY] = countryCode
+        dataStore.updateData { preferences ->
+            preferences.toBuilder()
+                .setCountryCode(countryCode)
+                .build()
         }
     }
 
     suspend fun saveLanguage(languageCode: String) {
-        context.dataStore.edit { preferences ->
-            preferences[LANGUAGE_KEY] = languageCode
+        dataStore.updateData { preferences ->
+            preferences.toBuilder()
+                .setLanguageCode(languageCode)
+                .build()
         }
     }
+}
+
+
+object UserPreferencesSerializer : Serializer<UserPreferences> {
+    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
+
+    override suspend fun readFrom(input: InputStream): UserPreferences {
+        try {
+            return UserPreferences.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Cannot read proto.", exception)
+        }
+    }
+
+    override suspend fun writeTo(t: UserPreferences, output: OutputStream) = t.writeTo(output)
 }
