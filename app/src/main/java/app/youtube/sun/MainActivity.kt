@@ -1,5 +1,6 @@
 package app.youtube.sun
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,10 +51,14 @@ class MainActivity : ComponentActivity() {
                         val locale = Locale(it)
                         Locale.setDefault(locale)
                         val config = resources.configuration
+
                         config.setLocale(locale)
-                        resources.updateConfiguration(config, resources.displayMetrics)
+
+                        val context = createConfigurationContext(config)
+                        applyOverrideConfiguration(context.resources.configuration)
                     }
                 }
+
 
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
