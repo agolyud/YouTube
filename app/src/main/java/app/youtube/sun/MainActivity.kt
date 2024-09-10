@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,6 +28,7 @@ import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.main.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 
@@ -44,23 +46,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            filterViewModel.selectedLanguage.collect { selectedLanguage ->
+                selectedLanguage?.let { newLanguage ->
+                    val currentLocale = resources.configuration.locales[0]
+                    if (currentLocale.language != newLanguage) {
+                        val newLocale = Locale(newLanguage)
+                        setLocale(this@MainActivity, newLocale)
+                        recreate()
+                    }
+                }
+            }
+        }
+
         enableEdgeToEdge()
 
         setContent {
             YouTubeSunTheme {
                 val navController = rememberNavController()
-                val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
-
-                LaunchedEffect(selectedLanguage) {
-                    selectedLanguage?.let { newLanguage ->
-                        val currentLocale = resources.configuration.locales[0]
-                        if (currentLocale.language != newLanguage) {
-                            val newLocale = Locale(newLanguage)
-                            setLocale(this@MainActivity, newLocale)
-                            recreate()
-                        }
-                    }
-                }
 
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
@@ -92,15 +96,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 fun setLocale(context: Context, locale: Locale): Context {
-        Locale.setDefault(locale)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-        config.setLayoutDirection(locale)
+    Locale.setDefault(locale)
+    val config = context.resources.configuration
+    config.setLocale(locale)
+    config.setLayoutDirection(locale)
 
-        return context.createConfigurationContext(config)
-    }
+    return context.createConfigurationContext(config)
+}
 
 
 

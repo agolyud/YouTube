@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
 import javax.inject.Inject
 
@@ -31,7 +32,6 @@ class FilterViewModel @Inject constructor(
             val savedLanguage = userPreferences.selectedLanguage.first()
             if (savedLanguage != null) {
                 _selectedLanguage.value = savedLanguage
-                updateLocale(savedLanguage)
             } else {
                 val deviceLanguage = Locale.getDefault().language
                 _selectedLanguage.value = deviceLanguage
@@ -51,15 +51,6 @@ class FilterViewModel @Inject constructor(
         viewModelScope.launch {
             userPreferences.saveLanguage(languageCode)
             _selectedLanguage.value = languageCode
-            updateLocale(languageCode)
         }
-    }
-
-    private fun updateLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        getApplication<Application>().resources.updateConfiguration(config, getApplication<Application>().resources.displayMetrics)
     }
 }
