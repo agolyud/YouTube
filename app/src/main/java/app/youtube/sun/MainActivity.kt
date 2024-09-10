@@ -1,5 +1,8 @@
 package app.youtube.sun
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -35,6 +38,14 @@ class MainActivity : ComponentActivity() {
     private val videoListViewModel: VideoListViewModel by viewModels()
     private val videoDetailViewModel: VideoDetailViewModel by viewModels()
     private val filterViewModel: FilterViewModel by viewModels()
+    private var isRestarting = false
+
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val language = sharedPreferences.getString("selected_language", "en") ?: "en"
+        val localizedContext = setLocale(newBase, language)
+        super.attachBaseContext(localizedContext)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,22 +54,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             YouTubeSunTheme {
                 val navController = rememberNavController()
-
-                // Observe language changes and update locale
                 val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
+
                 LaunchedEffect(selectedLanguage) {
                     selectedLanguage?.let {
-                        val locale = Locale(it)
-                        Locale.setDefault(locale)
-                        val config = resources.configuration
-
-                        config.setLocale(locale)
-
-                        val context = createConfigurationContext(config)
-                        applyOverrideConfiguration(context.resources.configuration)
+                        val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
+                        val currentLanguage = sharedPreferences.getString("selected_language", "en")
+                        if (currentLanguage != it && !isRestarting) {
+                            sharedPreferences.edit().putString("selected_language", it).apply()
+                            isRestarting = true
+                            recreate()
+                        }
                     }
                 }
-
 
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
@@ -90,6 +98,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
+fun setLocale(context: Context, language: String): Context {
+    val locale = Locale(language)
+    Locale.setDefault(locale)
+
+    val config = Configuration(context.resources.configuration)
+    config.setLocale(locale)
+    return context.createConfigurationContext(config)
+}
 
 
 
