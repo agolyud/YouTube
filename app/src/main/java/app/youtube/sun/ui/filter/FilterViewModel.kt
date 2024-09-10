@@ -2,6 +2,7 @@ package app.youtube.sun.ui.filter
 
 import android.app.Application
 import android.content.res.Configuration
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.youtube.sun.data.preferences.UserPreferences
@@ -28,17 +29,27 @@ class FilterViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _selectedCountry.value = userPreferences.selectedCountry.first() ?: "US"
-            val savedLanguage = userPreferences.selectedLanguage.first()
-            if (savedLanguage != null) {
-                _selectedLanguage.value = savedLanguage
+            val savedCountry = userPreferences.selectedCountry.first()
+            if (savedCountry.isNullOrEmpty()) {
+                val deviceCountry = Locale.getDefault().country
+                _selectedCountry.value = deviceCountry
+                userPreferences.saveCountry(deviceCountry)
             } else {
+                _selectedCountry.value = savedCountry
+            }
+
+            val savedLanguage = userPreferences.selectedLanguage.first()
+            if (savedLanguage.isNullOrEmpty()) {
                 val deviceLanguage = Locale.getDefault().language
                 _selectedLanguage.value = deviceLanguage
                 userPreferences.saveLanguage(deviceLanguage)
+            } else {
+                _selectedLanguage.value = savedLanguage
             }
         }
     }
+
+
 
     fun updateCountry(countryCode: String) {
         viewModelScope.launch {
