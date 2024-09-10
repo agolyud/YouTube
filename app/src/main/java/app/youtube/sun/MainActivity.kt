@@ -1,9 +1,6 @@
 package app.youtube.sun
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,13 +35,11 @@ class MainActivity : ComponentActivity() {
     private val videoListViewModel: VideoListViewModel by viewModels()
     private val videoDetailViewModel: VideoDetailViewModel by viewModels()
     private val filterViewModel: FilterViewModel by viewModels()
-    private var isRestarting = false
 
-    override fun attachBaseContext(newBase: Context) {
-        val sharedPreferences = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        val language = sharedPreferences.getString("selected_language", "en") ?: "en"
-        val localizedContext = setLocale(newBase, language)
-        super.attachBaseContext(localizedContext)
+    override fun attachBaseContext(newBase: Context?) {
+        val newLocale = Locale.getDefault()
+        val contextWithLocale = newBase?.let { setLocale(it, newLocale) }
+        super.attachBaseContext(contextWithLocale)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +52,11 @@ class MainActivity : ComponentActivity() {
                 val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
 
                 LaunchedEffect(selectedLanguage) {
-                    selectedLanguage?.let {
-                        val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)
-                        val currentLanguage = sharedPreferences.getString("selected_language", "en")
-                        if (currentLanguage != it && !isRestarting) {
-                            sharedPreferences.edit().putString("selected_language", it).apply()
-                            isRestarting = true
+                    selectedLanguage?.let { newLanguage ->
+                        val currentLocale = resources.configuration.locales[0]
+                        if (currentLocale.language != newLanguage) {
+                            val newLocale = Locale(newLanguage)
+                            setLocale(this@MainActivity, newLocale)
                             recreate()
                         }
                     }
@@ -99,14 +93,14 @@ class MainActivity : ComponentActivity() {
 }
 
 
-fun setLocale(context: Context, language: String): Context {
-    val locale = Locale(language)
-    Locale.setDefault(locale)
+fun setLocale(context: Context, locale: Locale): Context {
+        Locale.setDefault(locale)
+        val config = context.resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
 
-    val config = Configuration(context.resources.configuration)
-    config.setLocale(locale)
-    return context.createConfigurationContext(config)
-}
+        return context.createConfigurationContext(config)
+    }
 
 
 
