@@ -7,6 +7,8 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import app.youtube.sun.data.preferences.UserPreferencesProto.UserPreferences
 import com.google.protobuf.InvalidProtocolBufferException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.InputStream
@@ -15,9 +17,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
+private val dataStoreScope = CoroutineScope(Dispatchers.IO)
+
 private val Context.userPreferencesDataStore: DataStore<UserPreferences> by dataStore(
     fileName = "user_prefs.pb",
-    serializer = UserPreferencesSerializer
+    serializer = UserPreferencesSerializer,
+    scope = dataStoreScope
 )
 
 @Singleton
@@ -51,7 +56,6 @@ class UserPreferences @Inject constructor(private val context: Context) {
         }
     }
 }
-
 
 object UserPreferencesSerializer : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
