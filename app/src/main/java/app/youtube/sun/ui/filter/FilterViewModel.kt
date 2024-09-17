@@ -1,8 +1,6 @@
 package app.youtube.sun.ui.filter
 
 import android.app.Application
-import android.content.res.Configuration
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.youtube.sun.data.preferences.UserPreferences
@@ -11,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.Locale
 import javax.inject.Inject
 
@@ -26,12 +23,18 @@ class FilterViewModel @Inject constructor(
 
     private val _selectedLanguage = MutableStateFlow<String?>(null)
     val selectedLanguage: StateFlow<String?> get() = _selectedLanguage
+    private val supportedLanguages = listOf("en", "ru")
+    private val supportedCountries = listOf("US", "RU")
+
 
     init {
         viewModelScope.launch {
             val savedCountry = userPreferences.selectedCountry.first()
             if (savedCountry.isNullOrEmpty()) {
-                val deviceCountry = Locale.getDefault().country
+                var deviceCountry = Locale.getDefault().country.uppercase(Locale.getDefault())
+                if (!supportedCountries.contains(deviceCountry)) {
+                    deviceCountry = "US"
+                }
                 _selectedCountry.value = deviceCountry
                 userPreferences.saveCountry(deviceCountry)
             } else {
@@ -40,7 +43,10 @@ class FilterViewModel @Inject constructor(
 
             val savedLanguage = userPreferences.selectedLanguage.first()
             if (savedLanguage.isNullOrEmpty()) {
-                val deviceLanguage = Locale.getDefault().language
+                var deviceLanguage = Locale.getDefault().language.lowercase(Locale.getDefault())
+                if (!supportedLanguages.contains(deviceLanguage)) {
+                    deviceLanguage = "en"
+                }
                 _selectedLanguage.value = deviceLanguage
                 userPreferences.saveLanguage(deviceLanguage)
             } else {
@@ -49,19 +55,27 @@ class FilterViewModel @Inject constructor(
         }
     }
 
-
-
     fun updateCountry(countryCode: String) {
         viewModelScope.launch {
-            userPreferences.saveCountry(countryCode)
-            _selectedCountry.value = countryCode
+            val validCountryCode = if (supportedCountries.contains(countryCode.uppercase(Locale.getDefault()))) {
+                countryCode.uppercase(Locale.getDefault())
+            } else {
+                "US"
+            }
+            userPreferences.saveCountry(validCountryCode)
+            _selectedCountry.value = validCountryCode
         }
     }
 
     fun updateLanguage(languageCode: String) {
         viewModelScope.launch {
-            userPreferences.saveLanguage(languageCode)
-            _selectedLanguage.value = languageCode
+            val validLanguageCode = if (supportedLanguages.contains(languageCode.lowercase(Locale.getDefault()))) {
+                languageCode.lowercase(Locale.getDefault())
+            } else {
+                "en"
+            }
+            userPreferences.saveLanguage(validLanguageCode)
+            _selectedLanguage.value = validLanguageCode
         }
     }
 }
