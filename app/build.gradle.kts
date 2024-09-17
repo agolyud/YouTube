@@ -1,10 +1,10 @@
 plugins {
+    alias(libs.plugins.protobuf)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.protobuf)
+    alias(libs.plugins.ksp)
 }
 
 android {
