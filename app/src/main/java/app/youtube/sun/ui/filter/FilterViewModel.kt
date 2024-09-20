@@ -23,52 +23,53 @@ class FilterViewModel @Inject constructor(
 
     private val _selectedLanguage = MutableStateFlow<String?>(null)
     val selectedLanguage: StateFlow<String?> get() = _selectedLanguage
+
     private val supportedLanguages = listOf("en", "ru")
     private val supportedCountries = listOf("US", "RU")
 
     init {
         viewModelScope.launch {
-            val savedCountry = userPreferences.selectedCountry.first()
-            _selectedCountry.value = getValidValue(
-                savedCountry,
+            _selectedCountry.value = validSave(
+                userPreferences.selectedCountry.first(),
                 Locale.getDefault().country.uppercase(Locale.getDefault()),
                 supportedCountries,
-                "US"
-            ) { validCountry -> userPreferences.saveCountry(validCountry) }
+                "US",
+                userPreferences::saveCountry
+            )
 
-            val savedLanguage = userPreferences.selectedLanguage.first()
-            _selectedLanguage.value = getValidValue(
-                savedLanguage,
+            _selectedLanguage.value = validSave(
+                userPreferences.selectedLanguage.first(),
                 Locale.getDefault().language.lowercase(Locale.getDefault()),
                 supportedLanguages,
-                "en"
-            ) { validLanguage -> userPreferences.saveLanguage(validLanguage) }
+                "en",
+                userPreferences::saveLanguage
+            )
         }
     }
 
-    private suspend fun getValidValue(
+    private suspend fun validSave(
         savedValue: String?,
         deviceValue: String,
         supportedValues: List<String>,
         defaultValue: String,
         saveAction: suspend (String) -> Unit
     ): String {
-        return if (savedValue.isNullOrEmpty()) {
-            val newValue = if (supportedValues.contains(deviceValue)) deviceValue else defaultValue
-            saveAction(newValue)
-            newValue
+        val validValue = if (savedValue.isNullOrEmpty()) {
+            if (supportedValues.contains(deviceValue)) deviceValue else defaultValue
         } else {
             savedValue
         }
+        saveAction(validValue)
+        return validValue
     }
 
     fun updateCountry(countryCode: String) {
         viewModelScope.launch {
-            val validCountryCode = if (supportedCountries.contains(countryCode.uppercase(Locale.getDefault()))) {
-                countryCode.uppercase(Locale.getDefault())
-            } else {
+            val validCountryCode = getValidValue(
+                countryCode.uppercase(Locale.getDefault()),
+                supportedCountries,
                 "US"
-            }
+            )
             userPreferences.saveCountry(validCountryCode)
             _selectedCountry.value = validCountryCode
         }
@@ -76,13 +77,26 @@ class FilterViewModel @Inject constructor(
 
     fun updateLanguage(languageCode: String) {
         viewModelScope.launch {
-            val validLanguageCode = if (supportedLanguages.contains(languageCode.lowercase(Locale.getDefault()))) {
-                languageCode.lowercase(Locale.getDefault())
-            } else {
+            val validLanguageCode = getValidValue(
+                languageCode.lowercase(Locale.getDefault()),
+                supportedLanguages,
                 "en"
-            }
+            )
             userPreferences.saveLanguage(validLanguageCode)
             _selectedLanguage.value = validLanguageCode
         }
     }
+
+    private fun getValidValue(
+        value: String,
+        supportedValues: List<String>,
+        defaultValue: String
+    ): String {
+        return if (supportedValues.contains(value)) {
+            value
+        } else {
+            defaultValue
+        }
+    }
 }
+
