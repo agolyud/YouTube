@@ -26,32 +26,39 @@ class FilterViewModel @Inject constructor(
     private val supportedLanguages = listOf("en", "ru")
     private val supportedCountries = listOf("US", "RU")
 
-
     init {
         viewModelScope.launch {
             val savedCountry = userPreferences.selectedCountry.first()
-            if (savedCountry.isNullOrEmpty()) {
-                var deviceCountry = Locale.getDefault().country.uppercase(Locale.getDefault())
-                if (!supportedCountries.contains(deviceCountry)) {
-                    deviceCountry = "US"
-                }
-                _selectedCountry.value = deviceCountry
-                userPreferences.saveCountry(deviceCountry)
-            } else {
-                _selectedCountry.value = savedCountry
-            }
+            _selectedCountry.value = getValidValue(
+                savedCountry,
+                Locale.getDefault().country.uppercase(Locale.getDefault()),
+                supportedCountries,
+                "US"
+            ) { validCountry -> userPreferences.saveCountry(validCountry) }
 
             val savedLanguage = userPreferences.selectedLanguage.first()
-            if (savedLanguage.isNullOrEmpty()) {
-                var deviceLanguage = Locale.getDefault().language.lowercase(Locale.getDefault())
-                if (!supportedLanguages.contains(deviceLanguage)) {
-                    deviceLanguage = "en"
-                }
-                _selectedLanguage.value = deviceLanguage
-                userPreferences.saveLanguage(deviceLanguage)
-            } else {
-                _selectedLanguage.value = savedLanguage
-            }
+            _selectedLanguage.value = getValidValue(
+                savedLanguage,
+                Locale.getDefault().language.lowercase(Locale.getDefault()),
+                supportedLanguages,
+                "en"
+            ) { validLanguage -> userPreferences.saveLanguage(validLanguage) }
+        }
+    }
+
+    private suspend fun getValidValue(
+        savedValue: String?,
+        deviceValue: String,
+        supportedValues: List<String>,
+        defaultValue: String,
+        saveAction: suspend (String) -> Unit
+    ): String {
+        return if (savedValue.isNullOrEmpty()) {
+            val newValue = if (supportedValues.contains(deviceValue)) deviceValue else defaultValue
+            saveAction(newValue)
+            newValue
+        } else {
+            savedValue
         }
     }
 
