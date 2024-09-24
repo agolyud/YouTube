@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.dataStore
 import androidx.datastore.dataStoreFile
 import app.youtube.sun.data.preferences.UserPreferencesProto
 import app.youtube.sun.data.preferences.UserPreferencesSerializer
@@ -13,15 +12,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class ApplicationScope
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,10 +22,9 @@ object DataStoreModule {
 
     @Provides
     @Singleton
-    @ApplicationScope
     fun provideUserPreferencesDataStore(
         @ApplicationContext context: Context,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
+        @ApplicationScope applicationScope: CoroutineScope
     ): DataStore<UserPreferencesProto.UserPreferences> {
         return DataStoreFactory.create(
             serializer = UserPreferencesSerializer,
@@ -42,7 +34,7 @@ object DataStoreModule {
                     UserPreferencesProto.UserPreferences.getDefaultInstance()
                 }
             ),
-            scope = CoroutineScope(ioDispatcher)
+            scope = applicationScope
         )
     }
 }
