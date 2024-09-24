@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.youtube.sun.data.preferences.UserPreferences
+import app.youtube.sun.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val userPreferences: UserPreferences,
-    application: Application
+    application: Application,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application) {
 
     private val _selectedCountry = MutableStateFlow<String?>(null)
@@ -28,7 +31,7 @@ class FilterViewModel @Inject constructor(
     private val supportedCountries = listOf("US", "RU")
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _selectedCountry.value = validSave(
                 userPreferences.selectedCountry.first(),
                 Locale.getDefault().country.uppercase(Locale.getDefault()),
@@ -64,7 +67,7 @@ class FilterViewModel @Inject constructor(
     }
 
     fun updateCountry(countryCode: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val validCountryCode = getValidValue(
                 countryCode.uppercase(Locale.getDefault()),
                 supportedCountries,
@@ -76,7 +79,7 @@ class FilterViewModel @Inject constructor(
     }
 
     fun updateLanguage(languageCode: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val validLanguageCode = getValidValue(
                 languageCode.lowercase(Locale.getDefault()),
                 supportedLanguages,
