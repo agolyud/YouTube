@@ -30,6 +30,7 @@ import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.movies.MoviesScreen
 import java.util.Base64
 import java.nio.charset.StandardCharsets
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,9 +41,9 @@ fun MainScreen(
     navController: NavHostController
 ) {
     val items = listOf(
-        stringResource(id = R.string.main),
-        stringResource(id = R.string.gaming),
-        stringResource(id = R.string.movies)
+        R.string.main,
+        R.string.gaming,
+        R.string.movies
     )
     val icons = listOf(
         Icons.Filled.Home,
@@ -52,7 +53,7 @@ fun MainScreen(
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
-
+    val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
 
     LaunchedEffect(selectedCountry) {
         selectedCountry?.let {
@@ -79,10 +80,10 @@ fun MainScreen(
         },
         bottomBar = {
             NiaNavigationBar {
-                items.forEachIndexed { index, item ->
+                items.forEachIndexed { index, itemResId ->
                     NiaNavigationBarItem(
                         icon = { Icon(icons[index], contentDescription = null) },
-                        label = { Text(item) },
+                        label = { Text(stringResource(id = itemResId)) },
                         selected = selectedItem == index,
                         onClick = { selectedItem = index }
                     )
@@ -115,8 +116,13 @@ fun MainScreen(
             FilterDialog(
                 onDismiss = { isFilterDialogVisible = false },
                 selectedCountry = selectedCountry ?: "US",
+                selectedLanguage = selectedLanguage ?: Locale.getDefault().language,
                 onCountryChange = { countryCode ->
                     filterViewModel.updateCountry(countryCode)
+                    isFilterDialogVisible = false
+                },
+                onLanguageChange = { languageCode ->
+                    filterViewModel.updateLanguage(languageCode)
                     isFilterDialogVisible = false
                 }
             )

@@ -66,14 +66,13 @@ fun NiaNavigationBar(
     )
 }
 
-
 @Composable
 @Preview(showBackground = true)
 fun NiaNavigationBarPreview() {
     val items = listOf(
-        stringResource(id = R.string.main),
-        stringResource(id = R.string.gaming),
-        stringResource(id = R.string.movies)
+        R.string.main,
+        R.string.gaming,
+        R.string.movies
     )
     val icons = listOf(
         Icons.Filled.Home,
@@ -83,10 +82,10 @@ fun NiaNavigationBarPreview() {
     var selectedItem by remember { mutableStateOf(0) }
 
     NiaNavigationBar {
-        items.forEachIndexed { index, item ->
+        items.forEachIndexed { index, itemResId ->
             NiaNavigationBarItem(
                 icon = { Icon(icons[index], contentDescription = null) },
-                label = { Text(item) },
+                label = { Text(stringResource(id = itemResId)) },
                 selected = selectedItem == index,
                 onClick = { selectedItem = index }
             )

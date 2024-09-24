@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "app.youtube.sun.data.preferences";
+option java_outer_classname = "UserPreferencesProto";
+
+message UserPreferences {
+  string country_code = 1;
+  string language_code = 2;
+}

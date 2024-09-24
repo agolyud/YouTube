@@ -1,11 +1,11 @@
 package app.youtube.sun.di
 
-import android.content.Context
-import app.youtube.sun.data.preferences.CountryPreferences
+import androidx.datastore.core.DataStore
+import app.youtube.sun.data.preferences.UserPreferences
+import app.youtube.sun.data.preferences.UserPreferencesProto
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -15,7 +15,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCountryPreferences(@ApplicationContext context: Context): CountryPreferences {
-        return CountryPreferences(context)
+    fun provideCountryPreferences(
+        dataStore: DataStore<UserPreferencesProto.UserPreferences>
+    ): UserPreferences {
+        return UserPreferences(dataStore)
     }
 }

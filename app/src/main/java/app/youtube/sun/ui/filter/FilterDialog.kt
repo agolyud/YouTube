@@ -27,14 +27,18 @@ import kotlinx.coroutines.launch
 fun FilterDialog(
     onDismiss: () -> Unit,
     selectedCountry: String,
+    selectedLanguage: String,
     onCountryChange: (String) -> Unit,
+    onLanguageChange: (String) -> Unit
 ) {
     val countries = listOf(
         stringResource(id = R.string.US) to "US",
-        stringResource(id = R.string.RU) to "RU",
-        stringResource(id = R.string.CA) to "CA",
-        stringResource(id = R.string.DE) to "DE",
-        stringResource(id = R.string.IN) to "IN"
+        stringResource(id = R.string.RU) to "RU"
+    )
+
+    val languages = listOf(
+        stringResource(id = R.string.english) to "en",
+        stringResource(id = R.string.russian) to "ru"
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -42,10 +46,18 @@ fun FilterDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = stringResource(id = R.string.filter), style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = stringResource(id = R.string.filter),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
         },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 24.dp)
+            ) {
                 Text(stringResource(id = R.string.select_country))
                 Column(Modifier.selectableGroup()) {
                     countries.forEach { (countryName, countryCode) ->
@@ -57,11 +69,10 @@ fun FilterDialog(
                                     onClick = {
                                         coroutineScope.launch {
                                             onCountryChange(countryCode)
-                                            onDismiss()
                                         }
                                     }
                                 )
-                                .padding(16.dp)
+                                .padding(8.dp)
                         ) {
                             RadioButton(
                                 selected = selectedCountry == countryCode,
@@ -74,18 +85,51 @@ fun FilterDialog(
                         }
                     }
                 }
+
+                Text(stringResource(id = R.string.language), Modifier.padding(top = 16.dp))
+                Column(Modifier.selectableGroup()) {
+                    languages.forEach { (languageName, languageCode) ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = selectedLanguage == languageCode,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            onLanguageChange(languageCode)
+                                        }
+                                    }
+                                )
+                                .padding(8.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedLanguage == languageCode,
+                                onClick = null
+                            )
+                            Text(
+                                text = languageName,
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
             Text(
                 text = stringResource(id = R.string.close),
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(16.dp)
                     .clickable { onDismiss() },
                 color = MaterialTheme.colorScheme.primary
             )
         },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        ),
+        modifier = Modifier.padding(16.dp)
     )
 }
 
@@ -95,6 +139,8 @@ fun PreviewFilterDialog() {
     FilterDialog(
         onDismiss = {},
         selectedCountry = "US",
-        onCountryChange = {}
+        selectedLanguage = "en",
+        onCountryChange = {},
+        onLanguageChange = {}
     )
 }
