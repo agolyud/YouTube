@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    id("plugins.apikeys")
 }
 
 android {
@@ -23,8 +24,8 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "API_VIDEOS", "\"https://www.googleapis.com/youtube/v3/\"")
-        buildConfigField("String", "API_KEY", "\"AIzaSyAIbsvpobEtjb79FuqFykUFoTBokK8oZpI\"")
+        buildConfigField("String", "API_KEY", "\"${apiKeys.apiKey}\"")
+        buildConfigField("String", "API_VIDEOS", "\"${apiKeys.apiVideos}\"")
     }
 
     buildTypes {
