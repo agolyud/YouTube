@@ -16,4 +16,5 @@
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
     <string name="language">Язык</string>
+    <string name="search_on_youtube">Поиск на YouTube</string>
 </resources>
