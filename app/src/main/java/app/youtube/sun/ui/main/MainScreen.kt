@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,6 +53,7 @@ fun MainScreen(
     )
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
+    var isSearchScreen by remember { mutableStateOf(false) }
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
     val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
 
@@ -72,6 +74,9 @@ fun MainScreen(
                     else -> stringResource(id = R.string.main)
                 }) },
                 actions = {
+                    IconButton(onClick = { isSearchScreen = true }) {
+                        Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
+                    }
                     IconButton(onClick = { isFilterDialogVisible = true }) {
                         Icon(imageVector = Icons.Filled.FilterList, contentDescription = "Filter")
                     }
@@ -126,6 +131,11 @@ fun MainScreen(
                     isFilterDialogVisible = false
                 }
             )
+        }
+
+        if (isSearchScreen){
+
+            TODO()
         }
     }
 }
