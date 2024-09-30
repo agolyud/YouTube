@@ -27,6 +27,7 @@ import app.youtube.sun.ui.filter.FilterViewModel
 import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.main.MainScreen
+import app.youtube.sun.ui.search.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -75,6 +76,11 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
+
+                    composable("searchScreen") {
+                        SearchScreen()
+                    }
+
                     composable(
                         "detailScreen/{title}/{description}",
                         arguments = listOf(

@@ -53,7 +53,6 @@ fun MainScreen(
     )
     var selectedItem by remember { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
-    var isSearchScreen by remember { mutableStateOf(false) }
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
     val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
 
@@ -74,7 +73,7 @@ fun MainScreen(
                     else -> stringResource(id = R.string.main)
                 }) },
                 actions = {
-                    IconButton(onClick = { isSearchScreen = true }) {
+                    IconButton(onClick = { navController.navigate("searchScreen") }) {
                         Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
                     }
                     IconButton(onClick = { isFilterDialogVisible = true }) {
@@ -131,11 +130,6 @@ fun MainScreen(
                     isFilterDialogVisible = false
                 }
             )
-        }
-
-        if (isSearchScreen){
-
-            TODO()
         }
     }
 }
