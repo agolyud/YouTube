@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -51,7 +52,7 @@ fun MainScreen(
         Icons.Filled.SportsEsports,
         Icons.Filled.Movie
     )
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by rememberSaveable { mutableStateOf(0) }
     var isFilterDialogVisible by remember { mutableStateOf(false) }
     val selectedCountry by filterViewModel.selectedCountry.collectAsState()
     val selectedLanguage by filterViewModel.selectedLanguage.collectAsState()
