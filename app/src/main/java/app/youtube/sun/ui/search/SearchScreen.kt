@@ -63,8 +63,9 @@ fun SearchScreen(navController: NavHostController) {
                             onValueChange = { searchText = it },
                             placeholder = {
                                 Text(
-                                    stringResource(id = R.string.search_on_youtube),
-                                    color = Color.Gray
+                                    text = stringResource(id = R.string.search_on_youtube),
+                                    color = Color.Gray,
+                                    style = MaterialTheme.typography.bodyLarge
                                 )
                             },
                             modifier = Modifier
@@ -73,11 +74,14 @@ fun SearchScreen(navController: NavHostController) {
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 containerColor = Color(0xFFF5F5F5),
                                 focusedBorderColor = Color.Transparent,
-                                unfocusedBorderColor = Color.Transparent
+                                unfocusedBorderColor = Color.Transparent,
+                                focusedTextColor = Color.Black
                             ),
+                            textStyle = MaterialTheme.typography.bodyLarge,
                             shape = CircleShape,
                             singleLine = true
                         )
+
 
                         IconButton(onClick = {
                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
