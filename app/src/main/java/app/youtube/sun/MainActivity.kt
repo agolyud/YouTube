@@ -80,7 +80,10 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("searchScreen") {
-                        SearchScreen(navController = navController, searchViewModel)
+                        SearchScreen(
+                            navController = navController,
+                            searchViewModel,
+                            videoDetailViewModel)
                     }
 
                     composable(

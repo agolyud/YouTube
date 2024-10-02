@@ -26,15 +26,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.NavHostController
 import app.youtube.sun.R
+import app.youtube.sun.data.models.Movie
+import app.youtube.sun.ui.detail.VideoDetailViewModel
+import app.youtube.sun.ui.list.VideoListScreen
+import java.nio.charset.StandardCharsets
 import java.util.Locale
+import java.util.Base64
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    viewModel: SearchViewModel
+    viewModel: SearchViewModel,
+    videoDetailViewModel: VideoDetailViewModel
 ) {
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
+    val searchResults by viewModel.searchResults.collectAsState()
     val context = LocalContext.current
 
     val speechRecognizerLauncher = rememberLauncherForActivityResult(
@@ -112,20 +119,33 @@ fun SearchScreen(
                     }
                 })
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
+    ) { innerPadding ->
+        if (searchResults.isNotEmpty()) {
+            val movies = searchResults.mapNotNull { item ->
+                val videoId = item.id?.videoId
+                val snippet = item.snippet
+                if (videoId != null && snippet != null) {
+                    Movie(
+                        title = snippet.title ?: "",
+                        thumbnailUrl = snippet.thumbnails?.high?.url ?: "",
+                        id = videoId
+                    )
+                } else {
+                    null
+                }
+            }
+            VideoListScreen(
+                movies = movies,
+                loadMore = { viewModel.loadMore() },
+                onVideoClick = { videoId ->
+                    videoDetailViewModel.fetchVideoDetails(videoId) { title, description ->
+                        val encodedTitle = Base64.getUrlEncoder().encodeToString(title.toByteArray(StandardCharsets.UTF_8))
+                        val encodedDescription = Base64.getUrlEncoder().encodeToString(description.toByteArray(StandardCharsets.UTF_8))
+                        navController.navigate("detailScreen/$encodedTitle/$encodedDescription")
+                    }
+                },
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun MainScreen() {
-//    SearchScreen(navController = rememberNavController())
-//}
