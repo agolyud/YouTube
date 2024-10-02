@@ -50,6 +50,7 @@ fun SearchScreen(
             val spokenText = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (result.resultCode == Activity.RESULT_OK && spokenText != null) {
                 searchText = TextFieldValue(spokenText[0] ?: "")
+                viewModel.onSearchQuerySubmitted(searchText.text)
             } else {
                 Toast.makeText(context, "Voice input failed", Toast.LENGTH_SHORT).show()
             }
@@ -104,7 +105,10 @@ fun SearchScreen(
 
                         IconButton(onClick = {
                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                                putExtra(
+                                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                )
                                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                                 putExtra(RecognizerIntent.EXTRA_PROMPT, "Говорите сейчас")
                             }

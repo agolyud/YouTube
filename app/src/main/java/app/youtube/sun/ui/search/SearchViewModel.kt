@@ -8,12 +8,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import app.youtube.sun.BuildConfig
 import app.youtube.sun.data.responses.SearchResult
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import app.youtube.sun.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -24,16 +23,20 @@ class SearchViewModel @Inject constructor(
     private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
     val searchResults: StateFlow<List<SearchResult>> get() = _searchResults
 
+    private val _searchQuery = MutableStateFlow<String?>(null)
+    val searchQuery: StateFlow<String?> get() = _searchQuery
+
     private var _nextPageToken: String? = null
     private var currentQuery: String = ""
-    private var searchJob: Job? = null
+
 
     fun load(query: String) {
         viewModelScope.launch(ioDispatcher) {
             val apiKey = BuildConfig.API_KEY
             val response = repository.searchVideos(query, apiKey, _nextPageToken)
-                _searchResults.value += response.items ?: emptyList()
-                _nextPageToken = response.nextPageToken
+            val newItems = response.items ?: emptyList()
+            _searchResults.update { it + newItems }
+            _nextPageToken = response.nextPageToken
         }
     }
 
@@ -45,18 +48,12 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onSearchQueryChanged(query: String) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch(ioDispatcher) {
-            delay(3000)
-            if (query.isNotBlank()) {
-                reload(query)
-            }
-        }
+        _searchQuery.value = query
     }
 
     fun onSearchQuerySubmitted(query: String) {
-        searchJob?.cancel()
         if (query.isNotBlank()) {
+            _searchQuery.value = query
             reload(query)
         }
     }
