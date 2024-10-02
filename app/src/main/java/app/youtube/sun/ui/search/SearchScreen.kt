@@ -9,6 +9,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Mic
@@ -21,15 +23,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import app.youtube.sun.R
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(
+    navController: NavHostController,
+    viewModel: SearchViewModel
+) {
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
     val context = LocalContext.current
 
@@ -56,11 +60,14 @@ fun SearchScreen(navController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Назад")
                         }
                         OutlinedTextField(
                             value = searchText,
-                            onValueChange = { searchText = it },
+                            onValueChange = {
+                                searchText = it
+                                viewModel.onSearchQueryChanged(it.text)
+                            },
                             placeholder = {
                                 Text(
                                     text = stringResource(id = R.string.search_on_youtube),
@@ -79,15 +86,20 @@ fun SearchScreen(navController: NavHostController) {
                             ),
                             textStyle = MaterialTheme.typography.bodyLarge,
                             shape = CircleShape,
-                            singleLine = true
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                            keyboardActions = KeyboardActions(
+                                onSearch = {
+                                    viewModel.onSearchQuerySubmitted(searchText.text)
+                                }
+                            )
                         )
-
 
                         IconButton(onClick = {
                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                                putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now")
+                                putExtra(RecognizerIntent.EXTRA_PROMPT, "Говорите сейчас")
                             }
                             speechRecognizerLauncher.launch(intent)
                         }) {
@@ -112,10 +124,8 @@ fun SearchScreen(navController: NavHostController) {
     }
 }
 
-
-@Preview
-@Composable
-fun MainScreen() {
-    SearchScreen(navController = rememberNavController())
-}
-
+//@Preview
+//@Composable
+//fun MainScreen() {
+//    SearchScreen(navController = rememberNavController())
+//}

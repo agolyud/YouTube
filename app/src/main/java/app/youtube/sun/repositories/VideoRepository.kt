@@ -3,6 +3,7 @@ package app.youtube.sun.repositories
 import app.youtube.sun.data.responses.TopVideosResponse
 import app.youtube.sun.data.responses.VideoDetailResponse
 import app.youtube.sun.data.network.YouTubeDataSource
+import app.youtube.sun.data.responses.SearchResponse
 import app.youtube.sun.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -21,6 +22,12 @@ open class VideoRepository @Inject constructor(
     suspend fun getVideoDetails(videoId: String, apiKey: String): VideoDetailResponse {
         return withContext(ioDispatcher) {
             dataSource.fetchVideoDetails(videoId, apiKey)
+        }
+    }
+
+    suspend fun searchVideos(query: String, apiKey: String, pageToken: String? = null): SearchResponse {
+        return withContext(ioDispatcher) {
+            dataSource.searchVideos(query, apiKey, pageToken)
         }
     }
 }
