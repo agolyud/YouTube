@@ -52,7 +52,7 @@ fun SearchScreen(
                 searchText = TextFieldValue(spokenText[0] ?: "")
                 viewModel.onSearchQuerySubmitted(searchText.text)
             } else {
-                Toast.makeText(context, "Voice input failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.voice_input_failed, Toast.LENGTH_SHORT).show()
             }
         }
     )
@@ -68,7 +68,7 @@ fun SearchScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Назад")
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                         }
                         OutlinedTextField(
                             value = searchText,
@@ -110,7 +110,7 @@ fun SearchScreen(
                                     RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
                                 )
                                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                                putExtra(RecognizerIntent.EXTRA_PROMPT, "Говорите сейчас")
+                                putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.speak_now)
                             }
                             speechRecognizerLauncher.launch(intent)
                         }) {

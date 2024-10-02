@@ -17,4 +17,6 @@
     <string name="russian">Русский</string>
     <string name="language">Язык</string>
     <string name="search_on_youtube">Поиск на YouTube</string>
+    <string name="voice_input_failed">Голосовой ввод не удался</string>
+    <string name="speak_now">Говорите сейчас</string>
 </resources>

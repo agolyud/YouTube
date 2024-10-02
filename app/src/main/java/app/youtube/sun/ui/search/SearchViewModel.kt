@@ -10,28 +10,24 @@ import app.youtube.sun.BuildConfig
 import app.youtube.sun.data.responses.SearchResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import app.youtube.sun.di.IoDispatcher
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: VideoRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
     val searchResults: StateFlow<List<SearchResult>> get() = _searchResults
 
     private val _searchQuery = MutableStateFlow<String?>(null)
-    val searchQuery: StateFlow<String?> get() = _searchQuery
 
     private var _nextPageToken: String? = null
     private var currentQuery: String = ""
 
 
     fun load(query: String) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             val apiKey = BuildConfig.API_KEY
             val response = repository.searchVideos(query, apiKey, _nextPageToken)
             val newItems = response.items ?: emptyList()

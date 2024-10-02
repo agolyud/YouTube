@@ -16,4 +16,6 @@
     <string name="russian">Russian</string>
     <string name="language">Language</string>
     <string name="search_on_youtube">Search on YouTube</string>
+    <string name="voice_input_failed">Voice input failed</string>
+    <string name="speak_now">Speak Now</string>
 </resources>
