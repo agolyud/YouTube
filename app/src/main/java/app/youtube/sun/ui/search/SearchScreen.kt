@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
@@ -46,7 +47,7 @@ fun SearchScreen(
     viewModel: SearchViewModel,
     videoDetailViewModel: VideoDetailViewModel
 ) {
-    var searchText by remember { mutableStateOf(TextFieldValue("")) }
+    var searchText by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue(viewModel.searchQuery.orEmpty())) }
     val searchResults by viewModel.searchResults.collectAsState()
 
     val context = LocalContext.current
@@ -62,6 +63,14 @@ fun SearchScreen(
             }
         }
     )
+
+    DisposableEffect(Unit) {
+        onDispose {
+            if (navController.previousBackStackEntry?.destination?.route != "searchScreen") {
+                viewModel.clearSearchResults()
+            }
+        }
+    }
 
     SearchScreenContent(
         searchText = searchText,

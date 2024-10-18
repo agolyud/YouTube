@@ -21,10 +21,10 @@ class SearchViewModel @Inject constructor(
     val searchResults: StateFlow<List<SearchResult>> get() = _searchResults
 
     private val _searchQuery = MutableStateFlow<String?>(null)
+    val searchQuery: String? get() = _searchQuery.value
 
     private var _nextPageToken: String? = null
     private var currentQuery: String = ""
-
 
     fun load(query: String) {
         viewModelScope.launch {
@@ -59,4 +59,10 @@ class SearchViewModel @Inject constructor(
             load(currentQuery)
         }
     }
+
+    fun clearSearchResults() {
+        _searchResults.value = emptyList()
+        _searchQuery.value = null
+    }
 }
+
