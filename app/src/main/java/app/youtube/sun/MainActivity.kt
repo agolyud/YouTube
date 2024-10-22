@@ -27,6 +27,8 @@ import app.youtube.sun.ui.filter.FilterViewModel
 import app.youtube.sun.ui.list.VideoListScreen
 import app.youtube.sun.ui.list.VideoListViewModel
 import app.youtube.sun.ui.main.MainScreen
+import app.youtube.sun.ui.search.SearchScreen
+import app.youtube.sun.ui.search.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -65,6 +67,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             YouTubeSunTheme {
                 val navController = rememberNavController()
+                val searchViewModel: SearchViewModel by viewModels()
 
                 NavHost(navController = navController, startDestination = "mainScreen") {
                     composable("mainScreen") {
@@ -75,6 +78,14 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
+
+                    composable("searchScreen") {
+                        SearchScreen(
+                            navController = navController,
+                            searchViewModel,
+                            videoDetailViewModel)
+                    }
+
                     composable(
                         "detailScreen/{title}/{description}",
                         arguments = listOf(
