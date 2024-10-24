@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    id("app.youtube.sun.apikeys")
+    id("apikeys")
 }
 
 android {

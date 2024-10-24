@@ -10,7 +10,7 @@ repositories {
 gradlePlugin {
     plugins {
         create("apiKeysPlugin") {
-            id = "app.youtube.sun.apikeys"
+            id = "apikeys"
             implementationClass = "ApiKeysPlugin"
         }
     }
