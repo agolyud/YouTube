@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "YouTubeSun"
 include(":app")
- 
+includeBuild("build-logic")
