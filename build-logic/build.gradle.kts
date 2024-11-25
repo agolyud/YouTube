@@ -17,5 +17,9 @@ gradlePlugin {
             id = "hilt"
             implementationClass = "HiltPlugin"
         }
+        create("composePlugin") {
+            id = "compose"
+            implementationClass = "ComposePlugin"
+        }
     }
 }
