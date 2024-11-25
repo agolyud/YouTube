@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -21,4 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "YouTubeSun"
 include(":app")
-includeBuild("build-logic")
+
+gradle.startParameter.excludedTaskNames.addAll(listOf("build-logic:testClasses"))
