@@ -13,5 +13,9 @@ gradlePlugin {
             id = "apikeys"
             implementationClass = "ApiKeysPlugin"
         }
+        create("hiltPlugin") {
+            id = "hilt"
+            implementationClass = "HiltPlugin"
+        }
     }
 }

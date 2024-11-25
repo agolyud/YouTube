@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.hilt)
+    id("hilt")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     id("apikeys")
@@ -91,11 +91,6 @@ dependencies {
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.protobuf.kotlin.lite)
-
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
-    kspAndroidTest(libs.hilt.android.compiler)
-    androidTestImplementation(libs.hilt.android.testing)
 
     // Retrofit
     implementation(libs.retrofit)
