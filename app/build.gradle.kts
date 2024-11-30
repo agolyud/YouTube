@@ -2,9 +2,11 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.hilt)
+    id("hilt")
+    id("compose")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    id("apikeys")
 }
 
 android {
@@ -23,8 +25,8 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "API_VIDEOS", "\"https://www.googleapis.com/youtube/v3/\"")
-        buildConfigField("String", "API_KEY", "\"AIzaSyAIbsvpobEtjb79FuqFykUFoTBokK8oZpI\"")
+        buildConfigField("String", "API_KEY", "\"${apiKeys.apiKey}\"")
+        buildConfigField("String", "API_VIDEOS", "\"${apiKeys.apiVideos}\"")
     }
 
     buildTypes {
@@ -76,25 +78,11 @@ protobuf {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.coil.compose)
 
-    implementation(libs.material.icons.core)
-    implementation(libs.material.icons.extended)
-    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.protobuf.kotlin.lite)
-
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
-    kspAndroidTest(libs.hilt.android.compiler)
-    androidTestImplementation(libs.hilt.android.testing)
 
     // Retrofit
     implementation(libs.retrofit)
@@ -106,11 +94,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.kotlinx.serialization.json)
 }
